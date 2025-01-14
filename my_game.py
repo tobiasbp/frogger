@@ -26,6 +26,8 @@ PLAYER_START_X = SCREEN_WIDTH / 2
 PLAYER_START_Y = 50
 PLAYER_SHOT_SPEED = 300
 
+PLAYER_JUMP_DIST = 30
+
 FIRE_KEY = arcade.key.SPACE
 
 
@@ -39,8 +41,9 @@ class GameView(arcade.View):
         This is run once when we switch to this view
         """
 
-        # Variable that will hold a list of shots fired by the player
-        self.player_shot_list = arcade.SpriteList()
+        self.pe = arcade.PymunkPhysicsEngine(
+            gravity=(0,0),
+        )
 
         # Set up the player info
         self.player_score = 0
@@ -54,6 +57,9 @@ class GameView(arcade.View):
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
         )
+
+        # Let physics engine control player sprite
+        self.pe.add_sprite(self.player)
 
         # Track the current state of what keys are pressed
         self.left_pressed = False
@@ -94,9 +100,6 @@ class GameView(arcade.View):
         # Clear screen so we can draw new stuff
         self.clear()
 
-        # Draw the player shot
-        self.player_shot_list.draw()
-
         # Draw the player sprite
         self.player.draw()
 
@@ -129,8 +132,8 @@ class GameView(arcade.View):
         # Update player sprite
         self.player.on_update(delta_time)
 
-        # Update the player shots
-        self.player_shot_list.on_update(delta_time)
+        # Physics engine takes a step
+        self.pe.step()
 
         # The game is over when the player scores a 100 points
         if self.player_score >= 100:
@@ -152,6 +155,9 @@ class GameView(arcade.View):
         Called whenever a key is pressed.
         """
 
+        # The new player position
+        new_pp = self.player.position
+
         # End the game if the escape key is pressed
         if key == arcade.key.ESCAPE:
             self.game_over()
@@ -159,28 +165,24 @@ class GameView(arcade.View):
         # Track state of arrow keys
         if key == arcade.key.UP:
             self.up_pressed = True
+            new_pp = (new_pp[0], new_pp[1] + PLAYER_JUMP_DIST)
         elif key == arcade.key.DOWN:
             self.down_pressed = True
+            new_pp = (new_pp[0], new_pp[1] - PLAYER_JUMP_DIST)
         elif key == arcade.key.LEFT:
             self.left_pressed = True
+            new_pp = (new_pp[0] - PLAYER_JUMP_DIST, new_pp[1])
         elif key == arcade.key.RIGHT:
             self.right_pressed = True
+            new_pp = (new_pp[0] + PLAYER_JUMP_DIST, new_pp[1])
+
+        self.pe.set_position(
+            sprite=self.player,
+            position=new_pp,
+        )
 
         if key == FIRE_KEY:
-            # Player gets points for firing?
-            self.player_score += 10
-
-            # Create the new shot
-            new_shot = PlayerShot(
-                center_x=self.player.center_x,
-                center_y=self.player.center_y,
-                speed=PLAYER_SHOT_SPEED,
-                max_y_pos=SCREEN_HEIGHT,
-                scale=SPRITE_SCALING,
-            )
-
-            # Add the new shot to the list of shots
-            self.player_shot_list.append(new_shot)
+            pass
 
     def on_key_release(self, key, modifiers):
         """
