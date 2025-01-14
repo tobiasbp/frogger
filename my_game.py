@@ -13,7 +13,7 @@ import arcade
 from my_sprites import Player, PlayerShot
 
 # Set the scaling of all sprites in the game
-SPRITE_SCALING = 0.5
+SPRITE_SCALING = 2
 
 # Set the size of the screen
 SCREEN_WIDTH = 800
@@ -49,6 +49,17 @@ class GameView(arcade.View):
         self.player_score = 0
         self.player_lives = PLAYER_LIVES
 
+        self.texture_pack_name = "images/tiny-battle/tilemap.png"
+
+        self.load_tilemap_textures = arcade.load_spritesheet(
+            file_name=self.texture_pack_name,
+            sprite_width=16,
+            sprite_height=16,
+            columns=11,
+            count=11*17,
+            margin=1
+        )
+
         # Create a Player object
         self.player = Player(
             center_x=PLAYER_START_X,
@@ -57,6 +68,7 @@ class GameView(arcade.View):
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
         )
+        self.player.texture = self.load_tilemap_textures[6]
 
         # Let physics engine control player sprite
         self.pe.add_sprite(self.player)
