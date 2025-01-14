@@ -46,7 +46,7 @@ class GameView(arcade.View):
         self.player_score = 0
         self.player_lives = PLAYER_LIVES
 
-        self.texture_pack_name = "images/Tilemap/tilemap.png"
+        self.texture_pack_name = "images/tiny-battle/tilemap.png"
 
         self.load_tilemap_textures = arcade.load_spritesheet(
             file_name=self.texture_pack_name,
