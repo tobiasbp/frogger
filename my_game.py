@@ -6,6 +6,7 @@ This program uses the Arcade library found at http://arcade.academy
 Artwork from https://kenney.nl/assets/space-shooter-redux
 
 """
+import random
 
 import arcade
 
@@ -42,7 +43,7 @@ class GameView(arcade.View):
         """
 
         self.pe = arcade.PymunkPhysicsEngine(
-            gravity=(0,0),
+            gravity=(0, 0),
         )
 
         # Set up the player info
@@ -55,8 +56,8 @@ class GameView(arcade.View):
             file_name=self.texture_pack_name,
             sprite_width=16,
             sprite_height=16,
-            columns=11,
-            count=11*17,
+            columns=18,
+            count=11 * 18,
             margin=1
         )
 
@@ -68,7 +69,7 @@ class GameView(arcade.View):
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
         )
-        self.player.texture = self.load_tilemap_textures[6]
+        self.player.texture = self.load_tilemap_textures[106]
 
         # Let physics engine control player sprite
         self.pe.add_sprite(self.player)
@@ -104,6 +105,13 @@ class GameView(arcade.View):
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
 
+        self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
+        self.goal_sprite = arcade.Sprite(texture=self.load_tilemap_textures[190],
+                                         scale=SPRITE_SCALING,
+                                         center_x=random.randint(0, SCREEN_WIDTH),
+                                         center_y=random.randint(0, SCREEN_HEIGHT))
+        self.goal_sprite_list.append(self.goal_sprite)
+
     def on_draw(self):
         """
         Render the screen.
@@ -114,6 +122,9 @@ class GameView(arcade.View):
 
         # Draw the player sprite
         self.player.draw()
+
+        # Draw Goal
+        self.goal_sprite_list.draw()
 
         # Draw players score on screen
         arcade.draw_text(
@@ -136,6 +147,13 @@ class GameView(arcade.View):
             self.player.change_x = -PLAYER_SPEED_X
         elif self.right_pressed and not self.left_pressed:
             self.player.change_x = PLAYER_SPEED_X
+
+        self.goal_sprite_list.update()
+
+        if arcade.check_for_collision_with_list(self.player, self.goal_sprite_list):
+            print("LEVEL COMPLETED!")
+            self.goal_sprite_list[0].kill()
+            # self.game_over()
 
         # Move player with joystick if present
         if self.joystick:
