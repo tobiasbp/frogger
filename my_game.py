@@ -40,6 +40,7 @@ class GameView(arcade.View):
     def load_map(self):
         m = arcade.tilemap.TileMap(
             map_file = "images/tiny-battle/sampleMap.tmx",
+            scaling=SPRITE_SCALING,
         )
 
         return m
@@ -56,12 +57,15 @@ class GameView(arcade.View):
         self.map = self.load_map()
 
         # Add sprites from map physics engine
+        # This should only be done for some, if any, sprite lists
+        """
         for layer_name, layer_sprites in self.map.sprite_lists.items():
             print("Added map layer:", layer_name)
             self.pe.add_sprite_list(
                 sprite_list=layer_sprites,
                 body_type=arcade.PymunkPhysicsEngine.STATIC
                 )
+        """
 
         # Set up the player info
         self.player_score = 0
