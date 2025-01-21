@@ -16,9 +16,13 @@ from my_sprites import Player, PlayerShot
 # Set the scaling of all sprites in the game
 SPRITE_SCALING = 2
 
+TILE_SIZE = 16 * SPRITE_SCALING
+MAP_WIDTH = 15
+MAP_HEIGHT = 20
+
 # Set the size of the screen
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = MAP_WIDTH * TILE_SIZE
+SCREEN_HEIGHT = MAP_HEIGHT * TILE_SIZE
 
 # Variables controlling the player
 PLAYER_LIVES = 3
