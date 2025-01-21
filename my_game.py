@@ -106,11 +106,12 @@ class GameView(arcade.View):
         arcade.set_background_color(arcade.color.AMAZON)
 
         self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
-        self.goal_sprite = arcade.Sprite(texture=self.load_tilemap_textures[190],
-                                         scale=SPRITE_SCALING,
-                                         center_x=random.randint(0, SCREEN_WIDTH),
-                                         center_y=random.randint(0, SCREEN_HEIGHT))
-        self.goal_sprite_list.append(self.goal_sprite)
+        for g in range(6):
+            new_goal_sprite = arcade.Sprite(texture=self.load_tilemap_textures[190],
+                                            scale=SPRITE_SCALING,
+                                            center_x=random.randint(0, SCREEN_WIDTH),
+                                            center_y=random.randint(0, SCREEN_HEIGHT))
+            self.goal_sprite_list.append(new_goal_sprite)
 
     def on_draw(self):
         """
@@ -150,10 +151,12 @@ class GameView(arcade.View):
 
         self.goal_sprite_list.update()
 
-        if arcade.check_for_collision_with_list(self.player, self.goal_sprite_list):
-            print("LEVEL COMPLETED!")
-            self.goal_sprite_list[0].kill()
-            # self.game_over()
+        goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
+
+        for g in goal_hit_list:
+            # Remove the goal
+            g.remove_from_sprite_lists()
+            print("LEVEL COMPLETED")
 
         # Move player with joystick if present
         if self.joystick:
