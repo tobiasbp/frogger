@@ -36,6 +36,13 @@ class GameView(arcade.View):
     The view with the game itself
     """
 
+    def load_map(self):
+        m = arcade.tilemap.TileMap(
+            map_file = "images/tiny-battle/sampleMap.tmx",
+        )
+
+        return m
+
     def on_show_view(self):
         """
         This is run once when we switch to this view
@@ -44,6 +51,16 @@ class GameView(arcade.View):
         self.pe = arcade.PymunkPhysicsEngine(
             gravity=(0,0),
         )
+
+        self.map = self.load_map()
+
+        # Add sprites from map physics engine
+        for layer_name, layer_sprites in self.map.sprite_lists.items():
+            print("Added map layer:", layer_name)
+            self.pe.add_sprite_list(
+                sprite_list=layer_sprites,
+                body_type=arcade.PymunkPhysicsEngine.STATIC
+                )
 
         # Set up the player info
         self.player_score = 0
@@ -111,6 +128,9 @@ class GameView(arcade.View):
 
         # Clear screen so we can draw new stuff
         self.clear()
+
+        for key, sprite_list in self.map.sprite_lists.items():
+            sprite_list.draw()
 
         # Draw the player sprite
         self.player.draw()
