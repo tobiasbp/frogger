@@ -18,7 +18,7 @@ SPRITE_SCALING = 2
 
 TILE_SIZE = 16 * SPRITE_SCALING
 MAP_WIDTH = 15
-MAP_HEIGHT = 18
+MAP_HEIGHT = 20
 
 # Set the size of the screen
 SCREEN_WIDTH = MAP_WIDTH * TILE_SIZE
@@ -27,11 +27,11 @@ SCREEN_HEIGHT = MAP_HEIGHT * TILE_SIZE
 # Variables controlling the player
 PLAYER_LIVES = 3
 PLAYER_SPEED_X = 200
-PLAYER_START_X = 0
-PLAYER_START_Y = 0
+PLAYER_START_X = SCREEN_WIDTH / 2
+PLAYER_START_Y = 50
 PLAYER_SHOT_SPEED = 300
 
-PLAYER_JUMP_DIST = TILE_SIZE
+PLAYER_JUMP_DIST = 30
 
 FIRE_KEY = arcade.key.SPACE
 
@@ -48,21 +48,6 @@ class GameView(arcade.View):
         )
 
         return m
-
-    def add_goals(self):
-        """
-        Add goal posts on the spots that the tile map specifies
-        """
-        for layer_tile in self.map.sprite_lists["goal"]:
-            # /4 tile offset considering neither tile nor goal sprite has position in the center
-            new_goal_sprite = arcade.Sprite(
-                texture=self.load_tilemap_textures[190],
-                scale=SPRITE_SCALING, 
-                center_x = layer_tile.center_x - (layer_tile.width/4),
-                center_y = layer_tile.center_y - (layer_tile.height/4)
-            )
-            self.goal_sprite_list.append(new_goal_sprite)
-
 
     def on_show_view(self):
         """
@@ -86,13 +71,6 @@ class GameView(arcade.View):
                 )
         """
 
-        # player spawns at random position from the start position layer
-        for layer_name, layer_sprites in self.map.sprite_lists.items():
-            if layer_name == "start-pos":
-                self.player_start_pos = random.choice(
-                    list(tile.position for tile in layer_sprites)
-                )
-
         # Set up the player info
         self.player_score = 0
         self.player_lives = PLAYER_LIVES
@@ -110,8 +88,8 @@ class GameView(arcade.View):
 
         # Create a Player object
         self.player = Player(
-            center_x=self.player_start_pos[0],
-            center_y=self.player_start_pos[1],
+            center_x=PLAYER_START_X,
+            center_y=PLAYER_START_Y,
             min_x_pos=0,
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
@@ -153,8 +131,12 @@ class GameView(arcade.View):
         arcade.set_background_color(arcade.color.AMAZON)
 
         self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
-
-        self.add_goals()
+        for g in range(6):
+            new_goal_sprite = arcade.Sprite(texture=self.load_tilemap_textures[190],
+                                            scale=SPRITE_SCALING,
+                                            center_x=random.randint(0, SCREEN_WIDTH),
+                                            center_y=random.randint(0, SCREEN_HEIGHT))
+            self.goal_sprite_list.append(new_goal_sprite)
 
     def on_draw(self):
         """
@@ -202,6 +184,7 @@ class GameView(arcade.View):
         for g in goal_hit_list:
             # Remove the goal
             g.remove_from_sprite_lists()
+            print("LEVEL COMPLETED")
 
         # Move player with joystick if present
         if self.joystick:
@@ -213,8 +196,8 @@ class GameView(arcade.View):
         # Physics engine takes a step
         self.pe.step()
 
-        # The game is over when the player touches all goals
-        if not any(self.goal_sprite_list):
+        # The game is over when the player scores a 100 points
+        if self.player_score >= 100:
             self.game_over()
 
     def game_over(self):
@@ -244,25 +227,20 @@ class GameView(arcade.View):
         if key == arcade.key.UP:
             self.up_pressed = True
             new_pp = (new_pp[0], new_pp[1] + PLAYER_JUMP_DIST)
-            self.player.map_pos_change(0, 1)
         elif key == arcade.key.DOWN:
             self.down_pressed = True
             new_pp = (new_pp[0], new_pp[1] - PLAYER_JUMP_DIST)
-            self.player.map_pos_change(0, -1)
         elif key == arcade.key.LEFT:
             self.left_pressed = True
             new_pp = (new_pp[0] - PLAYER_JUMP_DIST, new_pp[1])
-            self.player.map_pos_change(-1, 0)
         elif key == arcade.key.RIGHT:
             self.right_pressed = True
             new_pp = (new_pp[0] + PLAYER_JUMP_DIST, new_pp[1])
-            self.player.map_pos_change(1, 0)
 
         self.pe.set_position(
             sprite=self.player,
             position=new_pp,
         )
-        print(self.player.map_pos)
 
         if key == FIRE_KEY:
             pass
