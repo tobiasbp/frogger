@@ -184,7 +184,6 @@ class GameView(arcade.View):
         for g in goal_hit_list:
             # Remove the goal
             g.remove_from_sprite_lists()
-            print("LEVEL COMPLETED")
 
         # Move player with joystick if present
         if self.joystick:
@@ -196,8 +195,8 @@ class GameView(arcade.View):
         # Physics engine takes a step
         self.pe.step()
 
-        # The game is over when the player scores a 100 points
-        if self.player_score >= 100:
+        # The game is over when the player touches all goals
+        if not any(self.goal_sprite_list):
             self.game_over()
 
     def game_over(self):
