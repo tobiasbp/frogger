@@ -6,12 +6,13 @@ class Player(arcade.Sprite):
     The player
     """
 
-    def __init__(self, min_x_pos, max_x_pos, center_x=0, center_y=0, scale=1):
+    def __init__(self, min_x_pos, max_x_pos, center_x=0, center_y=0, scale=1, map_pos=(0, 0)):
         """
         Setup new Player object
         """
 
         # Limits on player's x position
+        self.map_pos = map_pos
         self.min_x_pos = min_x_pos
         self.max_x_pos = max_x_pos
 
