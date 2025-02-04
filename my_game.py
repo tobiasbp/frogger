@@ -70,6 +70,10 @@ class GameView(arcade.View):
                 body_type=arcade.PymunkPhysicsEngine.STATIC
                 )
         """
+        for layer_name, layer_sprites in self.map.sprite_lists.items():
+            if layer_name == "start-pos":
+                print(random.choice(list(tile.position for tile in layer_sprites)))
+                self.player_start_pos = random.choice(list(tile.position for tile in layer_sprites))
 
         # Set up the player info
         self.player_score = 0
@@ -88,8 +92,8 @@ class GameView(arcade.View):
 
         # Create a Player object
         self.player = Player(
-            center_x=PLAYER_START_X,
-            center_y=PLAYER_START_Y,
+            center_x=self.player_start_pos[0],
+            center_y=self.player_start_pos[1],
             min_x_pos=0,
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
