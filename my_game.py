@@ -49,6 +49,21 @@ class GameView(arcade.View):
 
         return m
 
+    def add_goals(self):
+        """
+        Add goal posts on the spots that the tile map specifies
+        """
+        for layer_tile in self.map.sprite_lists["goal"]:
+            # /4 tile offset considering neither tile nor goal sprite has position in the center
+            new_goal_sprite = arcade.Sprite(
+                texture=self.load_tilemap_textures[190],
+                scale=SPRITE_SCALING, 
+                center_x = layer_tile.center_x - (layer_tile.width/4),
+                center_y = layer_tile.center_y - (layer_tile.height/4)
+            )
+            self.goal_sprite_list.append(new_goal_sprite)
+
+
     def on_show_view(self):
         """
         This is run once when we switch to this view
@@ -131,12 +146,8 @@ class GameView(arcade.View):
         arcade.set_background_color(arcade.color.AMAZON)
 
         self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
-        for g in range(6):
-            new_goal_sprite = arcade.Sprite(texture=self.load_tilemap_textures[190],
-                                            scale=SPRITE_SCALING,
-                                            center_x=random.randint(0, SCREEN_WIDTH),
-                                            center_y=random.randint(0, SCREEN_HEIGHT))
-            self.goal_sprite_list.append(new_goal_sprite)
+
+        self.add_goals()
 
     def on_draw(self):
         """
