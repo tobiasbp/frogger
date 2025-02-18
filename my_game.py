@@ -180,7 +180,6 @@ class GameView(arcade.View):
         self.goal_sprite_list.update()
 
         
-        #Why
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
 
         for g in goal_hit_list:
@@ -188,6 +187,7 @@ class GameView(arcade.View):
             g.remove_from_sprite_lists()
 
         """
+        # Movement using joystick is not correct. Still here if we want to implement joystick later
         # Move player with joystick if present
         if self.joystick:
             self.player.change_x = round(self.joystick.x) * PLAYER_SPEED_X
