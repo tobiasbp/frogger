@@ -226,6 +226,7 @@ class GameView(arcade.View):
         if key == arcade.key.UP:
             self.up_pressed = True
             new_pp = (new_pp[0], new_pp[1] + TILE_SIZE)
+            print(new_pp)
         elif key == arcade.key.DOWN:
             self.down_pressed = True
             new_pp = (new_pp[0], new_pp[1] - TILE_SIZE)
