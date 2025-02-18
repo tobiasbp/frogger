@@ -179,15 +179,19 @@ class GameView(arcade.View):
         
         self.goal_sprite_list.update()
 
-        #goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
+        
+        #Why
+        goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
 
-        #for g in goal_hit_list:
+        for g in goal_hit_list:
             # Remove the goal
-        #    g.remove_from_sprite_lists()
+            g.remove_from_sprite_lists()
 
+        """
         # Move player with joystick if present
         if self.joystick:
             self.player.change_x = round(self.joystick.x) * PLAYER_SPEED_X
+        """
 
         # Update player sprite
         self.player.on_update(delta_time)
@@ -226,7 +230,6 @@ class GameView(arcade.View):
         if key == arcade.key.UP:
             self.up_pressed = True
             new_pp = (new_pp[0], new_pp[1] + TILE_SIZE)
-            print(new_pp)
         elif key == arcade.key.DOWN:
             self.down_pressed = True
             new_pp = (new_pp[0], new_pp[1] - TILE_SIZE)
