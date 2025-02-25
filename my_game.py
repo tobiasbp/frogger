@@ -61,6 +61,16 @@ class GameView(arcade.View):
             )
             self.goal_sprite_list.append(new_goal_sprite)
 
+    def reset(self):
+        """
+        player spawns at random position from the start position layer
+        """
+        for layer_name, layer_sprites in self.map.sprite_lists.items():
+            if layer_name == "start-pos":
+                self.player.position = random.choice(
+                    list(tile.position for tile in layer_sprites)
+                )
+
 
     def on_show_view(self):
         """
@@ -96,12 +106,8 @@ class GameView(arcade.View):
             scale=SPRITE_SCALING,
         )
 
-        # player spawns at random position from the start position layer
-        for layer_name, layer_sprites in self.map.sprite_lists.items():
-            if layer_name == "start-pos":
-                self.player.position = random.choice(
-                    list(tile.position for tile in layer_sprites)
-                )
+        # Set player position
+        self.reset()
         
         self.player.texture = self.load_tilemap_textures[106]
 
