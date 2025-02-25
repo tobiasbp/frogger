@@ -198,6 +198,12 @@ class GameView(arcade.View):
         if not any(self.goal_sprite_list):
             self.game_over()
 
+        # Check if player dies
+        for tile in self.map.sprite_lists["deadly"]:
+            if tile.collides_with_point(self.player.position):
+                self.game_over()
+                
+
     def game_over(self):
         """
         Call this when the game is over
