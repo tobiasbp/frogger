@@ -243,7 +243,6 @@ class GameView(arcade.View):
             sprite=self.player,
             position=new_pp,
         )
-        print(self.player.map_pos)
 
         if key == FIRE_KEY:
             pass
