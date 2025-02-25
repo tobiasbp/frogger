@@ -62,6 +62,22 @@ class GameView(arcade.View):
             self.goal_sprite_list.append(new_goal_sprite)
 
 
+    def reset(self):
+        """
+        Level is reset
+        """
+        # Move player to start pos
+        for layer_name, layer_sprites in self.map.sprite_lists.items():
+            if layer_name == "start-pos":
+                position = random.choice(
+                    list(tile.position for tile in layer_sprites)
+                )
+                self.pe.set_position(
+                    self.player,
+                    position,
+                )
+
+
     def on_show_view(self):
         """
         This is run once when we switch to this view
@@ -73,12 +89,6 @@ class GameView(arcade.View):
 
         self.map = self.load_map()
 
-        # player spawns at random position from the start position layer
-        for layer_name, layer_sprites in self.map.sprite_lists.items():
-            if layer_name == "start-pos":
-                self.player_start_pos = random.choice(
-                    list(tile.position for tile in layer_sprites)
-                )
 
         # Set up the player info
         self.player_score = 0
@@ -97,12 +107,12 @@ class GameView(arcade.View):
 
         # Create a Player object
         self.player = Player(
-            center_x=self.player_start_pos[0],
-            center_y=self.player_start_pos[1],
             min_x_pos=0,
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
         )
+
+        
         self.player.texture = self.load_tilemap_textures[106]
 
         # Let physics engine control player sprite
@@ -142,6 +152,9 @@ class GameView(arcade.View):
         self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
 
         self.add_goals()
+
+        # Set player position
+        self.reset()
 
     def on_draw(self):
         """
@@ -201,8 +214,8 @@ class GameView(arcade.View):
         # Check if player dies when touching "deadly" tile
         for deadly_tile in self.map.sprite_lists["deadly"]:
             if deadly_tile.collides_with_point(self.player.position):
-                self.game_over()
-
+                self.reset()
+                
 
     def game_over(self):
         """
