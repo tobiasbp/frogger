@@ -91,8 +91,6 @@ class GameView(arcade.View):
 
         # Create a Player object
         self.player = Player(
-            center_x=self.player_start_pos[0],
-            center_y=self.player_start_pos[1],
             min_x_pos=0,
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
