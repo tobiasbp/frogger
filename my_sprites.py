@@ -11,8 +11,10 @@ class Player(arcade.Sprite):
         Setup new Player object
         """
 
-        # Limits on player's x position
+        # The player position on the map - Not Screen
         self.map_pos = map_pos
+
+        # Limits on player's x position
         self.min_x_pos = min_x_pos
         self.max_x_pos = max_x_pos
 
