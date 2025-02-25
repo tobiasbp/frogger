@@ -27,11 +27,11 @@ SCREEN_HEIGHT = MAP_HEIGHT * TILE_SIZE
 # Variables controlling the player
 PLAYER_LIVES = 3
 PLAYER_SPEED_X = 200
-PLAYER_START_X = SCREEN_WIDTH / 2
-PLAYER_START_Y = 50
+PLAYER_START_X = 0
+PLAYER_START_Y = 0
 PLAYER_SHOT_SPEED = 300
 
-PLAYER_JUMP_DIST = 30
+PLAYER_JUMP_DIST = TILE_SIZE
 
 FIRE_KEY = arcade.key.SPACE
 
@@ -179,6 +179,8 @@ class GameView(arcade.View):
 
         self.goal_sprite_list.update()
 
+        # print(self.player.center_x * TILE_SIZE, self.player.center_y * TILE_SIZE)
+
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
 
         for g in goal_hit_list:
@@ -211,6 +213,14 @@ class GameView(arcade.View):
         # Change to game over view
         self.window.show_view(game_over_view)
 
+    def map_pos_change(self, change_x, change_y):
+        old_pos = self.player.map_pos
+        new_pos = (old_pos[0]+change_x, old_pos[1]+change_y)
+
+        self.player.map_pos = new_pos
+
+        return self.player.map_pos
+
     def on_key_press(self, key, modifiers):
         """
         Called whenever a key is pressed.
@@ -227,15 +237,19 @@ class GameView(arcade.View):
         if key == arcade.key.UP:
             self.up_pressed = True
             new_pp = (new_pp[0], new_pp[1] + PLAYER_JUMP_DIST)
+            self.map_pos_change(0, 1)
         elif key == arcade.key.DOWN:
             self.down_pressed = True
             new_pp = (new_pp[0], new_pp[1] - PLAYER_JUMP_DIST)
+            self.map_pos_change(0, -1)
         elif key == arcade.key.LEFT:
             self.left_pressed = True
             new_pp = (new_pp[0] - PLAYER_JUMP_DIST, new_pp[1])
+            self.map_pos_change(-1, 0)
         elif key == arcade.key.RIGHT:
             self.right_pressed = True
             new_pp = (new_pp[0] + PLAYER_JUMP_DIST, new_pp[1])
+            self.map_pos_change(1, 0)
 
         # Sets the map_pos of the player, so the player knows its map position.
         self.player.map_pos = new_pp
@@ -244,6 +258,7 @@ class GameView(arcade.View):
             sprite=self.player,
             position=new_pp,
         )
+        print(self.player.map_pos)
 
         if key == FIRE_KEY:
             pass
