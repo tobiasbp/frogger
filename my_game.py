@@ -236,9 +236,6 @@ class GameView(arcade.View):
             self.right_pressed = True
             new_pp = (new_pp[0] + PLAYER_JUMP_DIST, new_pp[1])
 
-        # Sets the map_pos of the player, so the player knows its map position.
-        self.player.map_pos = new_pp
-
         self.pe.set_position(
             sprite=self.player,
             position=new_pp,
