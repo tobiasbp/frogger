@@ -40,6 +40,8 @@ class Player(arcade.Sprite):
         # Update player's x position based on current speed in x dimension
         self.center_x += delta_time * self.change_x
 
+
+
         # Enforce limits on player's x position
         if self.left < self.min_x_pos:
             self.left = self.min_x_pos
