@@ -24,8 +24,8 @@ class Player(arcade.Sprite):
             scale=scale,
         )
 
-    def map_pos_change(self, change_x, change_y):
-        self.map_pos = (self.map_pos[0]+change_x, self.map_pos[1]+change_y)
+    def map_pos_change(self, change_x_pos, change_y_pos):
+        self.map_pos = (self.map_pos[0] + change_x_pos, self.map_pos[1] + change_y_pos)
 
         return self.map_pos
 
