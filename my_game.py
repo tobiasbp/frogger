@@ -64,8 +64,9 @@ class GameView(arcade.View):
 
     def reset(self):
         """
-        player spawns at random position from the start position layer
+        Level is reset
         """
+        # Move player to start pos
         for layer_name, layer_sprites in self.map.sprite_lists.items():
             if layer_name == "start-pos":
                 position = random.choice(
