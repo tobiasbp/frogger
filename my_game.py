@@ -73,12 +73,6 @@ class GameView(arcade.View):
 
         self.map = self.load_map()
 
-        # player spawns at random position from the start position layer
-        for layer_name, layer_sprites in self.map.sprite_lists.items():
-            if layer_name == "start-pos":
-                self.player_start_pos = random.choice(
-                    list(tile.position for tile in layer_sprites)
-                )
 
         # Set up the player info
         self.player_score = 0
@@ -103,6 +97,14 @@ class GameView(arcade.View):
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
         )
+
+        # player spawns at random position from the start position layer
+        for layer_name, layer_sprites in self.map.sprite_lists.items():
+            if layer_name == "start-pos":
+                self.player.position = random.choice(
+                    list(tile.position for tile in layer_sprites)
+                )
+        
         self.player.texture = self.load_tilemap_textures[106]
 
         # Let physics engine control player sprite
