@@ -54,7 +54,7 @@ class GameView(arcade.View):
         for layer_tile in self.map.sprite_lists["goal"]:
             # /4 tile offset considering neither tile nor goal sprite has position in the center
             new_goal_sprite = arcade.Sprite(
-                texture=self.load_tilemap_textures[190],
+                texture=self.load_tilemap_textures[100],
                 scale=SPRITE_SCALING, 
                 center_x = layer_tile.center_x,
                 center_y = layer_tile.center_y,
@@ -173,31 +173,26 @@ class GameView(arcade.View):
         Movement and game logic
         """
 
-        # Calculate player speed based on the keys pressed
-        self.player.change_x = 0
-
-        
-        self.goal_sprite_list.update()
-
-        
-        goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
-
-        for g in goal_hit_list:
-            # Remove the goal
-            g.remove_from_sprite_lists()
-
-        """
         # Movement using joystick is not correct. Still here if we want to implement joystick later
         # Move player with joystick if present
+        """
         if self.joystick:
             self.player.change_x = round(self.joystick.x) * PLAYER_SPEED_X
         """
+
+        self.goal_sprite_list.update()
 
         # Update player sprite
         self.player.on_update(delta_time)
 
         # Physics engine takes a step
         self.pe.step()
+
+        goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
+        
+        for g in goal_hit_list:
+            # Remove the goal
+            g.remove_from_sprite_lists()
 
         # The game is over when the player touches all goals
         if not any(self.goal_sprite_list):
