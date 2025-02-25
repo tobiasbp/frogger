@@ -24,6 +24,14 @@ class Player(arcade.Sprite):
             scale=scale,
         )
 
+    def map_pos_change(self, change_x, change_y):
+        old_pos = self.map_pos
+        new_pos = (old_pos[0]+change_x, old_pos[1]+change_y)
+
+        self.map_pos = new_pos
+
+        return self.map_pos
+
     def on_update(self, delta_time):
         """
         Move the sprite
