@@ -225,16 +225,16 @@ class GameView(arcade.View):
         # Track state of arrow keys
         if key == arcade.key.UP:
             self.up_pressed = True
-            new_pp = (new_pp[0], new_pp[1] + TILE_SIZE)
+            new_pp = (new_pp[0], new_pp[1] + PLAYER_JUMP_DIST)
         elif key == arcade.key.DOWN:
             self.down_pressed = True
-            new_pp = (new_pp[0], new_pp[1] - TILE_SIZE)
+            new_pp = (new_pp[0], new_pp[1] - PLAYER_JUMP_DIST)
         elif key == arcade.key.LEFT:
             self.left_pressed = True
-            new_pp = (new_pp[0] - TILE_SIZE, new_pp[1])
+            new_pp = (new_pp[0] - PLAYER_JUMP_DIST, new_pp[1])
         elif key == arcade.key.RIGHT:
             self.right_pressed = True
-            new_pp = (new_pp[0] + TILE_SIZE, new_pp[1])
+            new_pp = (new_pp[0] + PLAYER_JUMP_DIST, new_pp[1])
 
         # Sets the map_pos of the player, so the player knows its map position.
         self.player.map_pos = new_pp
