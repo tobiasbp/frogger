@@ -25,7 +25,6 @@ SCREEN_WIDTH = MAP_WIDTH * TILE_SIZE
 SCREEN_HEIGHT = MAP_HEIGHT * TILE_SIZE
 
 # Variables controlling the player
-PLAYER_LIVES = 3
 PLAYER_START_X = SCREEN_WIDTH / 2
 PLAYER_START_Y = 50
 PLAYER_SHOT_SPEED = 300
@@ -92,7 +91,6 @@ class GameView(arcade.View):
 
         # Set up the player info
         self.player_score = 0
-        self.player_lives = PLAYER_LIVES
 
         self.texture_pack_name = "images/tiny-battle/tilemap.png"
 
@@ -202,7 +200,6 @@ class GameView(arcade.View):
         self.pe.step()
 
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
-        
         for g in goal_hit_list:
             # Remove the goal
             g.remove_from_sprite_lists()
@@ -215,12 +212,12 @@ class GameView(arcade.View):
         for deadly_tile in self.map.sprite_lists["deadly"]:
             if deadly_tile.collides_with_point(self.player.position):
                 self.player_lives -= 1
-                
+
                 if self.player_lives < 1:
                     self.game_over()
                 else:
                     self.reset()
-                
+
 
     def game_over(self):
         """
