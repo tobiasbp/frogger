@@ -29,6 +29,7 @@ PLAYER_START_X = SCREEN_WIDTH / 2
 PLAYER_START_Y = 50
 PLAYER_SHOT_SPEED = 300
 
+LEVEL_TIME = 60
 
 FIRE_KEY = arcade.key.SPACE
 
@@ -76,6 +77,9 @@ class GameView(arcade.View):
                     position,
                 )
 
+        # Reset timer
+        self.timer = LEVEL_TIME
+
 
     def on_show_view(self):
         """
@@ -102,6 +106,9 @@ class GameView(arcade.View):
             count=11 * 18,
             margin=1
         )
+
+        # Set up game timer
+        self.timer = LEVEL_TIME
 
         # Create a Player object
         self.player = Player(
@@ -179,6 +186,14 @@ class GameView(arcade.View):
             arcade.color.WHITE,  # Color of text
         )
 
+        # Draw time on screen
+        arcade.draw_text(
+            f"TIME: {round(self.timer)}",
+            10,
+            SCREEN_HEIGHT-40,
+            arcade.color.WHITE,
+        )
+
     def on_update(self, delta_time):
         """
         Movement and game logic
@@ -219,6 +234,13 @@ class GameView(arcade.View):
                 else:
                     self.reset()
 
+        # Update the timer
+        self.timer -= delta_time
+
+        # check if time has run out
+        if self.timer < 0:
+            self.game_over()
+                
 
     def game_over(self):
         """
