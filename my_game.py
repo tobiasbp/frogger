@@ -200,6 +200,7 @@ class GameView(arcade.View):
         self.pe.step()
 
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
+        
         for g in goal_hit_list:
             # Remove the goal
             g.remove_from_sprite_lists()
