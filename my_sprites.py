@@ -6,10 +6,13 @@ class Player(arcade.Sprite):
     The player
     """
 
-    def __init__(self, min_x_pos, max_x_pos, center_x=0, center_y=0, scale=1):
+    def __init__(self, min_x_pos, max_x_pos, center_x=0, center_y=0, scale=1, map_pos=(0, 0)):
         """
         Setup new Player object
         """
+
+        # The player position on the map - Not Screen
+        self.map_pos = map_pos
 
         # Limits on player's x position
         self.min_x_pos = min_x_pos
@@ -22,6 +25,11 @@ class Player(arcade.Sprite):
             filename="images/playerShip1_red.png",
             scale=scale,
         )
+
+    def map_pos_change(self, change_x_pos, change_y_pos):
+        self.map_pos = (self.map_pos[0] + change_x_pos, self.map_pos[1] + change_y_pos)
+
+        return self.map_pos
 
     def on_update(self, delta_time):
         """
