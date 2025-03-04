@@ -110,7 +110,6 @@ class GameView(arcade.View):
             scale=SPRITE_SCALING,
         )
 
-
         self.player.texture = self.load_tilemap_textures[106]
 
         # Let physics engine control player sprite
@@ -200,7 +199,6 @@ class GameView(arcade.View):
         self.pe.step()
 
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
-
         for g in goal_hit_list:
             # Remove the goal
             g.remove_from_sprite_lists()
@@ -213,7 +211,6 @@ class GameView(arcade.View):
         for deadly_tile in self.map.sprite_lists["deadly"]:
             if deadly_tile.collides_with_point(self.player.position):
                 self.reset()
-
 
     def game_over(self):
         """
