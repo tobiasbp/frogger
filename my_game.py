@@ -28,7 +28,6 @@ SCREEN_HEIGHT = MAP_HEIGHT * TILE_SIZE
 PLAYER_START_X = SCREEN_WIDTH / 2
 PLAYER_START_Y = 50
 PLAYER_SHOT_SPEED = 300
-PLAYER_MAX_LIVES = 3
 
 LEVEL_TIME = 60
 
@@ -78,8 +77,7 @@ class GameView(arcade.View):
                     position,
                 )
 
-        # Reset timer if new level starts
-        if self.player.lives == PLAYER_MAX_LIVES:
+        # Reset timer
             self.timer = LEVEL_TIME
 
 
@@ -109,15 +107,12 @@ class GameView(arcade.View):
             margin=1
         )
 
-        # Set up game timer
-        self.timer = LEVEL_TIME
 
         # Create a Player object
         self.player = Player(
             min_x_pos=0,
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
-            lives=PLAYER_MAX_LIVES,
         )
 
         
@@ -241,7 +236,7 @@ class GameView(arcade.View):
         self.timer -= delta_time
 
         # check if time has run out
-        if self.timer < 0:
+        if self.timer <= 0:
             self.game_over()
                 
 
