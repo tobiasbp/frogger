@@ -77,8 +77,9 @@ class GameView(arcade.View):
                     position,
                 )
 
-        # Reset timer
-        self.timer = LEVEL_TIME
+        # Reset timer if new level starts
+        if self.player_lives == PLAYER_LIVES:
+            self.timer = LEVEL_TIME
 
 
     def on_show_view(self):
