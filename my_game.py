@@ -150,12 +150,8 @@ class GameView(arcade.View):
         arcade.set_background_color(arcade.color.AMAZON)
 
         self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
-        for g in range(6):
-            new_goal_sprite = arcade.Sprite(texture=self.load_tilemap_textures[190],
-                                            scale=SPRITE_SCALING,
-                                            center_x=random.randint(0, SCREEN_WIDTH),
-                                            center_y=random.randint(0, SCREEN_HEIGHT))
-            self.goal_sprite_list.append(new_goal_sprite)
+
+        self.add_goals()
 
         # Set player position
         self.reset()
