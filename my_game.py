@@ -191,6 +191,14 @@ class GameView(arcade.View):
             arcade.color.WHITE,
         )
 
+        # draw lives on screen
+        arcade.draw_text(
+            f"LIVES: {self.player.lives}",
+            10,
+            SCREEN_HEIGHT - 60,
+            arcade.color.WHITE,
+        )
+
     def on_update(self, delta_time):
         """
         Movement and game logic
