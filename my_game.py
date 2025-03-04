@@ -78,7 +78,7 @@ class GameView(arcade.View):
                 )
 
         # Reset timer
-            self.timer = LEVEL_TIME
+        self.timer = LEVEL_TIME
 
 
     def on_show_view(self):
@@ -106,7 +106,6 @@ class GameView(arcade.View):
             count=11 * 18,
             margin=1
         )
-
 
         # Create a Player object
         self.player = Player(
