@@ -54,7 +54,7 @@ class GameView(arcade.View):
             # /4 tile offset considering neither tile nor goal sprite has position in the center
             new_goal_sprite = arcade.Sprite(
                 texture=self.load_tilemap_textures[100],
-                scale=SPRITE_SCALING,
+                scale=SPRITE_SCALING, 
                 center_x = layer_tile.center_x,
                 center_y = layer_tile.center_y,
             )
@@ -110,6 +110,7 @@ class GameView(arcade.View):
             scale=SPRITE_SCALING,
         )
 
+        
         self.player.texture = self.load_tilemap_textures[106]
 
         # Let physics engine control player sprite
