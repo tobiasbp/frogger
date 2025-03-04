@@ -26,12 +26,10 @@ SCREEN_HEIGHT = MAP_HEIGHT * TILE_SIZE
 
 # Variables controlling the player
 PLAYER_LIVES = 3
-PLAYER_SPEED_X = 200
 PLAYER_START_X = SCREEN_WIDTH / 2
 PLAYER_START_Y = 50
 PLAYER_SHOT_SPEED = 300
 
-PLAYER_JUMP_DIST = 30
 
 FIRE_KEY = arcade.key.SPACE
 
@@ -49,6 +47,37 @@ class GameView(arcade.View):
 
         return m
 
+    def add_goals(self):
+        """
+        Add goal posts on the spots that the tile map specifies
+        """
+        for layer_tile in self.map.sprite_lists["goal"]:
+            # /4 tile offset considering neither tile nor goal sprite has position in the center
+            new_goal_sprite = arcade.Sprite(
+                texture=self.load_tilemap_textures[100],
+                scale=SPRITE_SCALING, 
+                center_x = layer_tile.center_x,
+                center_y = layer_tile.center_y,
+            )
+            self.goal_sprite_list.append(new_goal_sprite)
+
+
+    def reset(self):
+        """
+        Level is reset
+        """
+        # Move player to start pos
+        for layer_name, layer_sprites in self.map.sprite_lists.items():
+            if layer_name == "start-pos":
+                position = random.choice(
+                    list(tile.position for tile in layer_sprites)
+                )
+                self.pe.set_position(
+                    self.player,
+                    position,
+                )
+
+
     def on_show_view(self):
         """
         This is run once when we switch to this view
@@ -60,16 +89,6 @@ class GameView(arcade.View):
 
         self.map = self.load_map()
 
-        # Add sprites from map physics engine
-        # This should only be done for some, if any, sprite lists
-        """
-        for layer_name, layer_sprites in self.map.sprite_lists.items():
-            print("Added map layer:", layer_name)
-            self.pe.add_sprite_list(
-                sprite_list=layer_sprites,
-                body_type=arcade.PymunkPhysicsEngine.STATIC
-                )
-        """
 
         # Set up the player info
         self.player_score = 0
@@ -88,12 +107,12 @@ class GameView(arcade.View):
 
         # Create a Player object
         self.player = Player(
-            center_x=PLAYER_START_X,
-            center_y=PLAYER_START_Y,
             min_x_pos=0,
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
         )
+
+        
         self.player.texture = self.load_tilemap_textures[106]
 
         # Let physics engine control player sprite
@@ -138,6 +157,9 @@ class GameView(arcade.View):
                                             center_y=random.randint(0, SCREEN_HEIGHT))
             self.goal_sprite_list.append(new_goal_sprite)
 
+        # Set player position
+        self.reset()
+
     def on_draw(self):
         """
         Render the screen.
@@ -168,26 +190,14 @@ class GameView(arcade.View):
         Movement and game logic
         """
 
-        # Calculate player speed based on the keys pressed
-        self.player.change_x = 0
-
-        # Move player with keyboard
-        if self.left_pressed and not self.right_pressed:
-            self.player.change_x = -PLAYER_SPEED_X
-        elif self.right_pressed and not self.left_pressed:
-            self.player.change_x = PLAYER_SPEED_X
-
-        self.goal_sprite_list.update()
-
-        goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
-
-        for g in goal_hit_list:
-            # Remove the goal
-            g.remove_from_sprite_lists()
-
+        # Movement using joystick is not correct. Still here if we want to implement joystick later
         # Move player with joystick if present
+        """
         if self.joystick:
             self.player.change_x = round(self.joystick.x) * PLAYER_SPEED_X
+        """
+
+        self.goal_sprite_list.update()
 
         # Update player sprite
         self.player.on_update(delta_time)
@@ -195,9 +205,21 @@ class GameView(arcade.View):
         # Physics engine takes a step
         self.pe.step()
 
+        goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
+        
+        for g in goal_hit_list:
+            # Remove the goal
+            g.remove_from_sprite_lists()
+
         # The game is over when the player touches all goals
         if not any(self.goal_sprite_list):
             self.game_over()
+
+        # Check if player dies when touching "deadly" tile
+        for deadly_tile in self.map.sprite_lists["deadly"]:
+            if deadly_tile.collides_with_point(self.player.position):
+                self.reset()
+                
 
     def game_over(self):
         """
@@ -225,16 +247,16 @@ class GameView(arcade.View):
         # Track state of arrow keys
         if key == arcade.key.UP:
             self.up_pressed = True
-            new_pp = (new_pp[0], new_pp[1] + PLAYER_JUMP_DIST)
+            new_pp = (new_pp[0], new_pp[1] + TILE_SIZE)
         elif key == arcade.key.DOWN:
             self.down_pressed = True
-            new_pp = (new_pp[0], new_pp[1] - PLAYER_JUMP_DIST)
+            new_pp = (new_pp[0], new_pp[1] - TILE_SIZE)
         elif key == arcade.key.LEFT:
             self.left_pressed = True
-            new_pp = (new_pp[0] - PLAYER_JUMP_DIST, new_pp[1])
+            new_pp = (new_pp[0] - TILE_SIZE, new_pp[1])
         elif key == arcade.key.RIGHT:
             self.right_pressed = True
-            new_pp = (new_pp[0] + PLAYER_JUMP_DIST, new_pp[1])
+            new_pp = (new_pp[0] + TILE_SIZE, new_pp[1])
 
         self.pe.set_position(
             sprite=self.player,
