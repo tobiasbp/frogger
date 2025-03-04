@@ -28,6 +28,7 @@ SCREEN_HEIGHT = MAP_HEIGHT * TILE_SIZE
 PLAYER_START_X = SCREEN_WIDTH / 2
 PLAYER_START_Y = 50
 PLAYER_SHOT_SPEED = 300
+PLAYER_MAX_LIVES = 3
 
 LEVEL_TIME = 60
 
@@ -78,7 +79,7 @@ class GameView(arcade.View):
                 )
 
         # Reset timer if new level starts
-        if self.player_lives == PLAYER_LIVES:
+        if self.player.lives == PLAYER_MAX_LIVES:
             self.timer = LEVEL_TIME
 
 
@@ -116,6 +117,7 @@ class GameView(arcade.View):
             min_x_pos=0,
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
+            lives=PLAYER_MAX_LIVES,
         )
 
         
@@ -228,9 +230,9 @@ class GameView(arcade.View):
         # Check if player dies when touching "deadly" tile
         for deadly_tile in self.map.sprite_lists["deadly"]:
             if deadly_tile.collides_with_point(self.player.position):
-                self.player.player_lives -= 1
+                self.player.lives -= 1
 
-                if self.player.player_lives < 1:
+                if self.player.lives < 1:
                     self.game_over()
                 else:
                     self.reset()
