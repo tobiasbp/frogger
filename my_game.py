@@ -212,7 +212,6 @@ class GameView(arcade.View):
         # Check if player dies when touching "deadly" tile
         for deadly_tile in self.map.sprite_lists["deadly"]:
             if deadly_tile.collides_with_point(self.player.position):
-                
                 self.reset()
 
     def game_over(self):
