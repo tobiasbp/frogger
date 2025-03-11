@@ -63,9 +63,9 @@ class GameView(arcade.View):
             )
             self.goal_sprite_list.append(new_goal_sprite)
 
-    def get_tiles_from_coordinate(self, screen_x, screen_y):
+    def get_tiles_from_screen_coordinate(self, screen_x, screen_y):
         """
-        return all tiles that shares map coordinates with the given screen coordinate
+        return all tiles where the screen coordinate is contained within the tile
         """
         tiles = []
         for layer_name, layer_tiles in self.map.sprite_lists.items():
@@ -74,8 +74,6 @@ class GameView(arcade.View):
                 if self.map.get_cartesian(tile.center_x, tile.center_y) == self.map.get_cartesian(screen_x, screen_y):
                     tiles.append(layer_name)
         return tiles
-
-
 
     def on_show_view(self):
         """
