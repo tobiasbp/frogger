@@ -77,6 +77,11 @@ class GameView(arcade.View):
                     position,
                 )
 
+        # Add cars (moving objects)
+        for tile in self.map.sprite_lists["moving-objects"]:
+            self.car_sprite_list.append(tile)
+            self.pe.add_sprite(tile)
+
         # Reset timer
         self.timer = LEVEL_TIME
 
@@ -151,9 +156,12 @@ class GameView(arcade.View):
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
 
+        # Add goals
         self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
-
         self.add_goals()
+
+        # Add list for cars
+        self.car_sprite_list = arcade.SpriteList()
 
         # Set player position
         self.reset()
@@ -174,6 +182,9 @@ class GameView(arcade.View):
 
         # Draw Goal
         self.goal_sprite_list.draw()
+
+        # Draw cars
+        self.car_sprite_list.draw()
 
         # Draw players score on screen
         arcade.draw_text(
@@ -220,7 +231,22 @@ class GameView(arcade.View):
         self.pe.step()
 
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
-        
+
+        # Update cars
+        for c in self.car_sprite_list:
+            new_pos_x = c.center_x + 3
+
+            self.pe.set_position(
+                sprite=c,
+                position=(new_pos_x, c.center_y)
+                )
+
+            if c.center_x > SCREEN_WIDTH+TILE_SIZE/2:
+                self.pe.set_position(
+                    sprite=c,
+                    position=(0-TILE_SIZE/2, c.center_y)
+                )
+
         for g in goal_hit_list:
             # Remove the goal
             g.remove_from_sprite_lists()
