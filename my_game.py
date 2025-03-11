@@ -79,7 +79,6 @@ class GameView(arcade.View):
 
         # Add cars (moving objects)
         for tile in self.map.sprite_lists["moving-objects"]:
-            self.car_sprite_list.append(tile)
             self.pe.add_sprite(tile)
 
         # Reset timer
@@ -160,10 +159,7 @@ class GameView(arcade.View):
         self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
         self.add_goals()
 
-        # Add list for cars
-        self.car_sprite_list = arcade.SpriteList()
-
-        # Set player position
+        # Set player position, cars and timer
         self.reset()
 
     def on_draw(self):
@@ -184,7 +180,7 @@ class GameView(arcade.View):
         self.goal_sprite_list.draw()
 
         # Draw cars
-        self.car_sprite_list.draw()
+        self.map.sprite_lists["moving-objects"].draw()
 
         # Draw players score on screen
         arcade.draw_text(
@@ -233,7 +229,7 @@ class GameView(arcade.View):
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
 
         # Update cars
-        for c in self.car_sprite_list:
+        for c in self.map.sprite_lists["moving-objects"]:
             new_pos_x = c.center_x + 3
 
             self.pe.set_position(
