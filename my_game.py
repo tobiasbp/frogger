@@ -188,9 +188,6 @@ class GameView(arcade.View):
         # Draw Goal
         self.goal_sprite_list.draw()
 
-        # Draw cars
-        self.map.sprite_lists["moving-objects"].draw()
-
         # Draw players score on screen
         arcade.draw_text(
             f"SCORE: {self.player_score}",  # Text to show
@@ -237,9 +234,8 @@ class GameView(arcade.View):
 
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
 
-        # Update cars
+        # Check if cars should wrap
         for c in self.map.sprite_lists["moving-objects"]:
-            new_pos_x = c.center_x + 3
 
             if c.center_x > SCREEN_WIDTH+TILE_SIZE/2:
                 self.pe.set_position(
