@@ -79,7 +79,16 @@ class GameView(arcade.View):
 
         # Add cars (moving objects)
         for tile in self.map.sprite_lists["moving-objects"]:
-            self.pe.add_sprite(tile)
+            # Add cars to physics engine. We may not want this
+            self.pe.add_sprite(
+                sprite=tile,
+                )
+            
+            # FIXME: we want to read velocity from property in layer 
+            self.pe.set_velocity(
+                sprite=tile,
+                velocity=(50,0)
+            )
 
         # Reset timer
         self.timer = LEVEL_TIME
@@ -231,11 +240,6 @@ class GameView(arcade.View):
         # Update cars
         for c in self.map.sprite_lists["moving-objects"]:
             new_pos_x = c.center_x + 3
-
-            self.pe.set_position(
-                sprite=c,
-                position=(new_pos_x, c.center_y)
-                )
 
             if c.center_x > SCREEN_WIDTH+TILE_SIZE/2:
                 self.pe.set_position(
