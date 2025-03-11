@@ -65,13 +65,18 @@ class GameView(arcade.View):
 
     def get_tiles_from_screen_coordinate(self, screen_x, screen_y):
         """
-        return all tiles where the screen coordinate is contained within the tile
+        get all tiles with matching map coordinate
         """
+        # the map coordinate corresponding to the screen coordinate
+        map_coordinate = self.map.get_cartesian(screen_x, screen_y)
+
+        # all tiles with same map coordinate
         tiles = []
+
         for layer_name, layer_tiles in self.map.sprite_lists.items():
             for tile in layer_tiles:
                 # checks if screen and tile coordinate share same map (cartesian) coordinates
-                if self.map.get_cartesian(tile.center_x, tile.center_y) == self.map.get_cartesian(screen_x, screen_y):
+                if self.map.get_cartesian(tile.center_x, tile.center_y) == map_coordinate:
                     tiles.append(layer_name)
         return tiles
 
