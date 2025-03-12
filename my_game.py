@@ -93,6 +93,19 @@ class GameView(arcade.View):
                     position,
                 )
 
+        # Add cars (moving objects)
+        for tile in self.map.sprite_lists["moving-objects"]:
+            # Add cars to physics engine. We may not want this
+            self.pe.add_sprite(
+                sprite=tile,
+                )
+            
+            # FIXME: we want to read velocity from property in layer 
+            self.pe.set_velocity(
+                sprite=tile,
+                velocity=(50,0)
+            )
+
         # Reset timer
         self.timer = LEVEL_TIME
 
@@ -167,11 +180,11 @@ class GameView(arcade.View):
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
 
+        # Add goals
         self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
-
         self.add_goals()
 
-        # Set player position
+        # Set player position, cars and timer
         self.reset()
 
     def on_draw(self):
@@ -236,7 +249,16 @@ class GameView(arcade.View):
         self.pe.step()
 
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
-        
+
+        # Check if cars should wrap
+        for c in self.map.sprite_lists["moving-objects"]:
+
+            if c.center_x > SCREEN_WIDTH+TILE_SIZE/2:
+                self.pe.set_position(
+                    sprite=c,
+                    position=(0-TILE_SIZE/2, c.center_y)
+                )
+
         for g in goal_hit_list:
             # Remove the goal
             g.remove_from_sprite_lists()
