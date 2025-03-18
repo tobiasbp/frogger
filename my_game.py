@@ -121,6 +121,8 @@ class GameView(arcade.View):
 
         self.map = self.load_map()
 
+        self.timer = 0
+
 
         # Set up the player info
         self.player_score = 0
