@@ -94,18 +94,18 @@ class GameView(arcade.View):
                 )
 
         # Add cars (moving objects)
-        for tile in self.map.sprite_lists["moving-objects"]:
+        for object in self.map.sprite_lists["moving-objects"]:
             # Add cars to physics engine. We may not want this
             self.pe.add_sprite(
-                sprite=tile,
+                sprite=object,
                 # Kinematic means it won't be moved by other objects
                 body_type=arcade.PymunkPhysicsEngine.KINEMATIC
                 )
             
             # FIXME: we want to read velocity from property in layer 
             self.pe.set_velocity(
-                sprite=tile,
-                velocity=(50,0)
+                sprite=object,
+                velocity=(object.properties["x-speed"], 0)
             )
 
         # Reset timer
