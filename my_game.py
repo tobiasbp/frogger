@@ -98,6 +98,8 @@ class GameView(arcade.View):
             # Add cars to physics engine. We may not want this
             self.pe.add_sprite(
                 sprite=tile,
+                # Kinematic means it won't be moved by other objects
+                body_type=arcade.PymunkPhysicsEngine.KINEMATIC
                 )
             
             # FIXME: we want to read velocity from property in layer 
@@ -149,7 +151,11 @@ class GameView(arcade.View):
         self.player.texture = self.load_tilemap_textures[106]
 
         # Let physics engine control player sprite
-        self.pe.add_sprite(self.player)
+        self.pe.add_sprite(
+            self.player,
+            # Kinematic means it won't be moved by other objects
+            body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
+            )
 
         # Track the current state of what keys are pressed
         self.left_pressed = False
