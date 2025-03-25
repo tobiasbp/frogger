@@ -266,6 +266,11 @@ class GameView(arcade.View):
                     sprite=c,
                     position=(0-TILE_SIZE/2, c.center_y)
                 )
+            elif c.center_x < 0-TILE_SIZE/2:
+                self.pe.set_position(
+                    sprite=c,
+                    position=(SCREEN_WIDTH+TILE_SIZE/2, c.center_y)
+                )
 
         for g in goal_hit_list:
             # Remove the goal
