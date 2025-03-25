@@ -25,9 +25,11 @@ class Player(arcade.Sprite):
         super().__init__(
             center_x=center_x,
             center_y=center_y,
-            filename="images/playerShip1_red.png",
             scale=scale,
         )
+
+        # sprite which the player rides on
+        self.rides_on = None
 
     def map_pos_change(self, change_x_pos, change_y_pos):
         self.map_pos = (self.map_pos[0] + change_x_pos, self.map_pos[1] + change_y_pos)
