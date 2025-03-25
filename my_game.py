@@ -99,7 +99,7 @@ class GameView(arcade.View):
             self.pe.add_sprite(
                 sprite=object,
                 # Body type cannot be kinematic if we want handler to work
-                #body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
+                # body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
                 collision_type="object",
                 )
             
@@ -166,7 +166,7 @@ class GameView(arcade.View):
         self.pe.add_sprite(
             self.player,
             # Body type cannot be kinematic, if we want our handler to work
-            #body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
+            # body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
             collision_type="player",
             )
 
