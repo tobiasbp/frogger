@@ -100,6 +100,7 @@ class GameView(arcade.View):
                 sprite=object,
                 # Kinematic means it won't be moved by other objects
                 #body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
+                #body type cannot be kinematic if we want handler to work
                 collision_type="object",
                 )
             
@@ -167,8 +168,8 @@ class GameView(arcade.View):
             self.player,
             # Kinematic means it won't be moved by other objects
             #body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
+            #Body type cannot be kinematic, if we want our handler to work
             collision_type="player",
-            #moment_of_inertia=arcade.PymunkPhysicsEngine.MOMENT_INF
             )
 
         # Track the current state of what keys are pressed
@@ -249,8 +250,6 @@ class GameView(arcade.View):
             SCREEN_HEIGHT - 60,
             arcade.color.WHITE,
         )
-
-        self.player.draw_hit_box()
 
     def on_update(self, delta_time):
         """
