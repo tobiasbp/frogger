@@ -98,8 +98,9 @@ class GameView(arcade.View):
             # Add cars to physics engine. We may not want this
             self.pe.add_sprite(
                 sprite=object,
-                # Kinematic means it won't be moved by other objects
-                body_type=arcade.PymunkPhysicsEngine.KINEMATIC
+                # Body type cannot be kinematic if we want handler to work
+                # body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
+                collision_type="object",
                 )
             
             self.pe.set_velocity(
@@ -114,6 +115,10 @@ class GameView(arcade.View):
         self.timer = LEVEL_TIME
 
 
+    def handler_player_object(self, player, object, _arbiter, _space, _data):
+        #self.reset()
+        print("player + object collision")
+
     def on_show_view(self):
         """
         This is run once when we switch to this view
@@ -121,6 +126,12 @@ class GameView(arcade.View):
 
         self.pe = arcade.PymunkPhysicsEngine(
             gravity=(0, 0),
+        )
+
+        self.pe.add_collision_handler(
+            "player",
+            "object",
+            post_handler = self.handler_player_object,
         )
 
         self.map = self.load_map()
@@ -148,15 +159,15 @@ class GameView(arcade.View):
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
         )
-
         
         self.player.texture = self.load_tilemap_textures[106]
 
         # Let physics engine control player sprite
         self.pe.add_sprite(
             self.player,
-            # Kinematic means it won't be moved by other objects
-            body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
+            # Body type cannot be kinematic, if we want our handler to work
+            # body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
+            collision_type="player",
             )
 
         # Track the current state of what keys are pressed
