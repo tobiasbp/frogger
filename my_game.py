@@ -98,9 +98,8 @@ class GameView(arcade.View):
             # Add cars to physics engine. We may not want this
             self.pe.add_sprite(
                 sprite=object,
-                # Kinematic means it won't be moved by other objects
+                # Body type cannot be kinematic if we want handler to work
                 #body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
-                #body type cannot be kinematic if we want handler to work
                 collision_type="object",
                 )
             
@@ -166,9 +165,8 @@ class GameView(arcade.View):
         # Let physics engine control player sprite
         self.pe.add_sprite(
             self.player,
-            # Kinematic means it won't be moved by other objects
+            # Body type cannot be kinematic, if we want our handler to work
             #body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
-            #Body type cannot be kinematic, if we want our handler to work
             collision_type="player",
             )
 
