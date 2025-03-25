@@ -102,10 +102,9 @@ class GameView(arcade.View):
                 body_type=arcade.PymunkPhysicsEngine.KINEMATIC
                 )
             
-            # FIXME: we want to read velocity from property in layer 
             self.pe.set_velocity(
                 sprite=object,
-                velocity=(object.properties["x-speed"], 0)
+                velocity=(object.properties.get("x-speed", 0), 0)
             )
 
         # Reset timer
