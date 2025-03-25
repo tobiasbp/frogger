@@ -104,7 +104,10 @@ class GameView(arcade.View):
             
             self.pe.set_velocity(
                 sprite=object,
-                velocity=(object.properties.get("x-speed", 0), 0)
+                velocity=(
+                    object.properties.get("x-speed", 0),
+                    object.properties.get("y-speed", 0),
+                )
             )
 
         # Reset timer
