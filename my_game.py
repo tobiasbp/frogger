@@ -296,19 +296,19 @@ class GameView(arcade.View):
         # Check if player dies when touching "deadly" tile
         for deadly_tile in self.map.sprite_lists["deadly"]:
             if deadly_tile.collides_with_point(self.player.position):
-                self.player.lives -= 1
+                self.player.die()
                 self.reset()
 
         # Update the timer
         self.timer -= delta_time
 
         # check if time has run out
-        if self.timer <= 0 or self.player.lives <= 0:
+        if self.timer <= 0 or self.player.is_dead:
             self.game_over()
 
         # checks if player is outside of screen
         if not (0 < self.player.center_x < SCREEN_WIDTH) or not (0 < self.player.center_y < SCREEN_HEIGHT):
-            self.player.lives -= 1
+            self.player.die()
             self.reset()
                 
 

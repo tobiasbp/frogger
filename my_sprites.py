@@ -17,6 +17,9 @@ class Player(arcade.Sprite):
         # The player lives which get set
         self.lives = lives
 
+        # whether the player is dead or not
+        self.is_dead = False
+
         # Limits on player's x position
         self.min_x_pos = min_x_pos
         self.max_x_pos = max_x_pos
@@ -35,6 +38,11 @@ class Player(arcade.Sprite):
         self.map_pos = (self.map_pos[0] + change_x_pos, self.map_pos[1] + change_y_pos)
 
         return self.map_pos
+
+    def die(self):
+        self.lives -= 1
+        if self.lives <= 0:
+            self.is_dead = True
 
     def on_update(self, delta_time):
         """
