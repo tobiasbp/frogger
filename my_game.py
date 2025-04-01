@@ -309,6 +309,15 @@ class GameView(arcade.View):
         # check if time has run out
         if self.timer <= 0:
             self.game_over()
+
+        # checks if player is outside of screen
+        if not (0 < self.player.center_x < SCREEN_WIDTH) or not (0 < self.player.center_y < SCREEN_HEIGHT):
+            self.player.lives -= 1
+
+            if self.player.lives < 1:
+                self.game_over()
+            else:
+                self.reset()
                 
 
     def game_over(self):
