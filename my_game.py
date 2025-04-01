@@ -271,18 +271,31 @@ class GameView(arcade.View):
 
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
 
-        # Check if cars should wrap
-        for c in self.map.sprite_lists["moving-objects"]:
+        # Check if objects should wrap
+        for o in self.map.sprite_lists["moving-objects"]:
 
-            if c.center_x > SCREEN_WIDTH+TILE_SIZE/2:
+            # Wrap on x-axis
+            if o.center_x > SCREEN_WIDTH+TILE_SIZE/2:
                 self.pe.set_position(
-                    sprite=c,
-                    position=(0-TILE_SIZE/2, c.center_y)
+                    sprite=o,
+                    position=(0-TILE_SIZE/2, o.center_y)
                 )
-            elif c.center_x < 0-TILE_SIZE/2:
+            elif o.center_x < 0-TILE_SIZE/2:
                 self.pe.set_position(
-                    sprite=c,
-                    position=(SCREEN_WIDTH+TILE_SIZE/2, c.center_y)
+                    sprite=o,
+                    position=(SCREEN_WIDTH+TILE_SIZE/2, o.center_y)
+                )
+
+            # Wrap on y-axis
+            if o.center_y > SCREEN_HEIGHT+TILE_SIZE/2:
+                self.pe.set_position(
+                    sprite=o,
+                    position=(o.center_x, 0-TILE_SIZE/2)
+                )
+            elif o.center_y < 0-TILE_SIZE/2:
+                self.pe.set_position(
+                    sprite=o,
+                    position=(o.center_x, SCREEN_HEIGHT+TILE_SIZE/2)
                 )
 
         for g in goal_hit_list:
