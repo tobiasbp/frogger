@@ -33,6 +33,10 @@ LEVEL_TIME = 60
 
 FIRE_KEY = arcade.key.SPACE
 
+# Has to be between 0.1 and 0.9
+TIME_BAR_WIDTH = int(SCREEN_WIDTH * 0.5)
+TIME_BAR_HEIGHT = 20
+
 
 class GameView(arcade.View):
     """
@@ -124,24 +128,25 @@ class GameView(arcade.View):
         Draws all the UI, boxes and text.
         """
 
-        time_box_width_procent = SCREEN_WIDTH*0.9
-
         time_box_x = SCREEN_WIDTH//18
 
-        time_bar_width = self.timer / LEVEL_TIME * time_box_width_procent
+        # Width of shrinking part of bar
+        time_bar_shrink_width = self.timer / LEVEL_TIME * TIME_BAR_WIDTH
 
+        # This is the actual shrinking fill of the time bar.
         self.timebar = arcade.draw_rectangle_filled(
-            center_x=time_box_x+time_bar_width / 2,
+            center_x=SCREEN_WIDTH // 2 - (TIME_BAR_WIDTH - time_bar_shrink_width),
             center_y=35,
-            width=time_bar_width,
-            height=20,
+            width=time_bar_shrink_width,
+            height=TIME_BAR_HEIGHT,
             color=arcade.color.ORANGE
         )
+        # This is the outline of the time bar.
         arcade.draw_rectangle_outline(
-            center_x=240,
+            center_x=SCREEN_WIDTH//2,
             center_y=35,
-            width=time_box_width_procent,
-            height=20,
+            width=TIME_BAR_WIDTH,
+            height=TIME_BAR_HEIGHT,
             color=arcade.color.BLACK,
             border_width=3
         )
