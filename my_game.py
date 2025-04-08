@@ -130,8 +130,6 @@ class GameView(arcade.View):
 
         time_bar_width = self.timer / LEVEL_TIME * time_box_width_procent
 
-        print(time_box_x+time_bar_width / 2)
-
         self.timebar = arcade.draw_rectangle_filled(
             center_x=time_box_x+time_bar_width / 2,
             center_y=35,
