@@ -34,8 +34,10 @@ LEVEL_TIME = 60
 FIRE_KEY = arcade.key.SPACE
 
 # Has to be between 0.1 and 0.9
-TIME_BAR_WIDTH = int(SCREEN_WIDTH * 0.5)
+TIME_BAR_WIDTH = int(SCREEN_WIDTH * 0.9)
 TIME_BAR_HEIGHT = 20
+TIME_BAR_X = (SCREEN_WIDTH - TIME_BAR_WIDTH) // 2
+TIME_BAR_Y = 35
 
 
 class GameView(arcade.View):
@@ -123,33 +125,45 @@ class GameView(arcade.View):
         #self.reset()
         print("player + object collision")
 
-    def draw_UI(self):
+    def draw_time_bar(self):
         """
-        Draws all the UI, boxes and text.
+        Draw the bar indicating time left to clear the level.
         """
 
-        time_box_x = SCREEN_WIDTH//18
+        # Background
+        arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=TIME_BAR_X,
+            bottom_left_y=TIME_BAR_Y,
+            width=TIME_BAR_WIDTH,
+            height=TIME_BAR_HEIGHT,
+            color=arcade.color.DARK_BLUE_GRAY,
+        )
 
-        # Width of shrinking part of bar
-        time_bar_shrink_width = self.timer / LEVEL_TIME * TIME_BAR_WIDTH
-
-        # This is the actual shrinking fill of the time bar.
-        self.timebar = arcade.draw_rectangle_filled(
-            center_x=SCREEN_WIDTH // 2 - (TIME_BAR_WIDTH - time_bar_shrink_width),
-            center_y=35,
-            width=time_bar_shrink_width,
+        # The shrinking part
+        arcade.draw_xywh_rectangle_filled(
+            bottom_left_x=TIME_BAR_X,
+            bottom_left_y=TIME_BAR_Y,
+            width=self.timer / LEVEL_TIME * TIME_BAR_WIDTH,
             height=TIME_BAR_HEIGHT,
             color=arcade.color.ORANGE
         )
-        # This is the outline of the time bar.
-        arcade.draw_rectangle_outline(
-            center_x=SCREEN_WIDTH//2,
-            center_y=35,
+
+        # The outline
+        arcade.draw_xywh_rectangle_outline(
+            bottom_left_x=TIME_BAR_X,
+            bottom_left_y=TIME_BAR_Y,
             width=TIME_BAR_WIDTH,
             height=TIME_BAR_HEIGHT,
             color=arcade.color.BLACK,
             border_width=3
         )
+
+    def draw_UI(self):
+        """
+        Draws all the UI, boxes and text.
+        """
+
+        self.draw_time_bar()
 
         # Draw players score on screen
         arcade.draw_text(
@@ -158,14 +172,6 @@ class GameView(arcade.View):
             SCREEN_HEIGHT - 20,  # Y positon
             arcade.color.WHITE,  # Color of text
         )
-
-        # Draw time on screen
-        # arcade.draw_text(
-        #    f"TIME: {round(self.timer)}",
-        #    15,
-        #    SCREEN_HEIGHT-40,
-        #    arcade.color.BLACK,
-        #)
 
         # draw lives on screen
         arcade.draw_text(
