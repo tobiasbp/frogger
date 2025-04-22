@@ -79,6 +79,9 @@ class GameView(arcade.View):
         return tiles
     
     def snap_to_map_coordinates(self, screen_x, screen_y):
+        """
+        Get coordinate of tile that is closest to position
+        """
         return(
             (((screen_x//TILE_SIZE) * TILE_SIZE) + (TILE_SIZE/2)),
             (((screen_y//TILE_SIZE) * TILE_SIZE) + (TILE_SIZE/2)),
@@ -129,7 +132,8 @@ class GameView(arcade.View):
             if object.properties.get("ridable", False):
                 player.rides_on = object
 
-        # Returns False to avoid "real" collision
+        # Returns False to ignore collision
+        # Only doable with pre_handler and begin_handler
         return False
 
 
@@ -329,7 +333,7 @@ class GameView(arcade.View):
             self.game_over()
 
         # Check if player dies when touching "deadly" tile
-        # Only check if player does not ride something
+        # Only check if player does not ride something, because ridable objects can be on top of deadly tiles
         if self.player.rides_on == None:
             for deadly_tile in self.map.sprite_lists["deadly"]:
                 if deadly_tile.collides_with_point(self.player.position):
