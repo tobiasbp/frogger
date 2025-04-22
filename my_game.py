@@ -78,7 +78,7 @@ class GameView(arcade.View):
                     tiles.append(layer_name)
         return tiles
     
-    def get_map_coordinates(self, screen_x, screen_y):
+    def snap_to_map_coordinates(self, screen_x, screen_y):
         return(
             (((screen_x//TILE_SIZE) * TILE_SIZE) + (TILE_SIZE/2)),
             (((screen_y//TILE_SIZE) * TILE_SIZE) + (TILE_SIZE/2)),
@@ -392,7 +392,7 @@ class GameView(arcade.View):
 
         self.pe.set_position(
             sprite=self.player,
-            position=self.get_map_coordinates(new_pp[0], new_pp[1]),
+            position=self.snap_to_map_coordinates(new_pp[0], new_pp[1]),
         )
 
         if key == FIRE_KEY:
