@@ -122,8 +122,9 @@ class GameView(arcade.View):
             # Checks if objects is "ridable". Player gets object in variable "rides_on"
             if object.properties.get("ridable", False):
                 player.rides_on = object
-                # Removes player from pe to avoid collision
-                self.pe.remove_sprite(self.player)
+
+        # Returns False to avoid "real" collision
+        return False
 
 
     def on_show_view(self):
@@ -138,7 +139,8 @@ class GameView(arcade.View):
         self.pe.add_collision_handler(
             "player",
             "object",
-            post_handler = self.handler_player_object,
+            # Has to be begin_handler or pre_handler to make avoid collision possible
+            begin_handler = self.handler_player_object,
         )
 
         self.map = self.load_map()
@@ -278,9 +280,10 @@ class GameView(arcade.View):
 
         # Player riding something
         if self.player.rides_on != None:
-            # Position set without pe because player was removed from it
-            self.player.position = self.player.rides_on.position
-
+            self.pe.set_position(
+                sprite=self.player,
+                position=self.player.rides_on.position,
+                )
 
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
 
@@ -377,6 +380,9 @@ class GameView(arcade.View):
             self.right_pressed = True
             new_pp = (new_pp[0] + TILE_SIZE, new_pp[1])
 
+        # Empty rides_on when player jumps off
+        self.player.rides_on = None        
+            
         self.pe.set_position(
             sprite=self.player,
             position=new_pp,
