@@ -77,6 +77,12 @@ class GameView(arcade.View):
                 if self.map.get_cartesian(tile.center_x, tile.center_y) == map_coordinate:
                     tiles.append(layer_name)
         return tiles
+    
+    def get_map_coordinates(self, screen_x, screen_y):
+        return(
+            (((screen_x//TILE_SIZE) * TILE_SIZE) + (TILE_SIZE/2)),
+            (((screen_y//TILE_SIZE) * TILE_SIZE) + (TILE_SIZE/2)),
+        )
 
     def reset(self):
         """
@@ -380,12 +386,13 @@ class GameView(arcade.View):
             self.right_pressed = True
             new_pp = (new_pp[0] + TILE_SIZE, new_pp[1])
 
-        # Empty rides_on when player jumps off
-        self.player.rides_on = None        
-            
+        # if the player is riding on something
+        if self.player.rides_on != None:
+            self.player.rides_on = None   
+
         self.pe.set_position(
             sprite=self.player,
-            position=new_pp,
+            position=self.get_map_coordinates(new_pp[0], new_pp[1]),
         )
 
         if key == FIRE_KEY:
