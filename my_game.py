@@ -158,6 +158,15 @@ class GameView(arcade.View):
             border_width=3
         )
 
+    def draw_player_lives(self, x, y, hor_spacing, radius):
+        for i in range(self.player.lives):
+            arcade.draw_circle_filled(
+                center_x=x+(i * hor_spacing),
+                center_y=y,
+                radius=radius,
+                color=[255,0,0]
+            )
+
     def draw_UI(self):
         """
         Draws all the UI, boxes and text.
@@ -165,20 +174,19 @@ class GameView(arcade.View):
 
         self.draw_time_bar()
 
+        self.draw_player_lives(
+            x=TILE_SIZE//2,
+            y=SCREEN_HEIGHT-TILE_SIZE//2,
+            hor_spacing=TILE_SIZE,
+            radius=TILE_SIZE/4
+        )
+
         # Draw players score on screen
         arcade.draw_text(
             f"SCORE: {self.player_score}",  # Text to show
-            10,  # X position
+            SCREEN_WIDTH//2,  # X position
             SCREEN_HEIGHT - 20,  # Y positon
             arcade.color.WHITE,  # Color of text
-        )
-
-        # draw lives on screen
-        arcade.draw_text(
-            f"LIVES: {self.player.lives}",
-            10,
-            SCREEN_HEIGHT - 60,
-            arcade.color.WHITE,
         )
 
     def on_show_view(self):
