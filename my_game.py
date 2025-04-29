@@ -157,8 +157,10 @@ class GameView(arcade.View):
             color=arcade.color.BLACK,
             border_width=3
         )
-
     def draw_player_lives(self, x, y, hor_spacing, radius):
+        """
+        draws red circles to represent the player lives
+        """
         for i in range(self.player.lives):
             arcade.draw_circle_filled(
                 center_x=x+(i * hor_spacing),
