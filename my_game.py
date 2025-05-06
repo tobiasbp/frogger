@@ -65,6 +65,10 @@ class GameView(arcade.View):
                 center_x = layer_tile.center_x,
                 center_y = layer_tile.center_y,
             )
+            self.pe.add_sprite(
+                sprite=new_goal_sprite,
+                collision_type="goal",
+            )
             self.goal_sprite_list.append(new_goal_sprite)
 
     def get_tiles_from_screen_coordinate(self, screen_x, screen_y):
@@ -124,6 +128,14 @@ class GameView(arcade.View):
     def handler_player_object(self, player, object, _arbiter, _space, _data):
         #self.reset()
         print("player + object collision")
+
+    def handler_player_goal(self, player, goal, _arbiter, _space, _data):
+        # remove the goal and return player to start
+        print(f"Goal Collected! Only {len(self.goal_sprite_list)} left!")
+        goal.kill()
+        self.reset()
+
+        return False
 
     def draw_time_bar(self):
         """
@@ -204,6 +216,11 @@ class GameView(arcade.View):
             "player",
             "object",
             post_handler = self.handler_player_object,
+        )
+        self.pe.add_collision_handler(
+            "player",
+            "goal",
+            pre_handler = self.handler_player_goal,
         )
 
         self.map = self.load_map()
@@ -319,7 +336,7 @@ class GameView(arcade.View):
         # Physics engine takes a step
         self.pe.step()
 
-        goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
+        # goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
 
         # Check if objects should wrap
         for o in self.map.sprite_lists["moving-objects"]:
@@ -348,9 +365,6 @@ class GameView(arcade.View):
                     position=(o.center_x, SCREEN_HEIGHT+TILE_SIZE/2)
                 )
 
-        for g in goal_hit_list:
-            # Remove the goal
-            g.remove_from_sprite_lists()
 
         # The game is over when the player touches all goals
         if not any(self.goal_sprite_list):
