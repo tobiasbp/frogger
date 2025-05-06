@@ -83,6 +83,15 @@ class GameView(arcade.View):
                 if self.map.get_cartesian(tile.center_x, tile.center_y) == map_coordinate:
                     tiles.append(layer_name)
         return tiles
+    
+    def snap_to_map_coordinates(self, screen_x, screen_y):
+        """
+        Get coordinate of tile that is closest to position
+        """
+        return(
+            (((screen_x//TILE_SIZE) * TILE_SIZE) + (TILE_SIZE/2)),
+            (((screen_y//TILE_SIZE) * TILE_SIZE) + (TILE_SIZE/2)),
+        )
 
     def reset(self):
         """
@@ -122,8 +131,23 @@ class GameView(arcade.View):
 
 
     def handler_player_object(self, player, object, _arbiter, _space, _data):
-        #self.reset()
-        print("player + object collision")
+        
+        
+        if self.player.rides_on == None:
+            # Checks if objects is "ridable". Player gets object in variable "rides_on"
+            if object.properties.get("ridable", False):
+                player.rides_on = object
+
+                # Returns False to ignore collision
+                # Only doable with pre_handler and begin_handler
+                return False
+            else:
+                self.reset()
+
+                # Returns False to avoid physics engine pushing objects in werid directions
+                return False
+            
+
 
     def draw_time_bar(self):
         """
@@ -203,7 +227,8 @@ class GameView(arcade.View):
         self.pe.add_collision_handler(
             "player",
             "object",
-            post_handler = self.handler_player_object,
+            # Has to be begin_handler or pre_handler to make avoid collision possible
+            begin_handler = self.handler_player_object,
         )
 
         self.map = self.load_map()
@@ -325,6 +350,13 @@ class GameView(arcade.View):
         # Physics engine takes a step
         self.pe.step()
 
+        # Player riding something
+        if self.player.rides_on != None:
+            self.pe.set_position(
+                sprite=self.player,
+                position=self.player.rides_on.position,
+                )
+
         goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
 
         # Check if objects should wrap
@@ -363,10 +395,12 @@ class GameView(arcade.View):
             self.game_over()
 
         # Check if player dies when touching "deadly" tile
-        for deadly_tile in self.map.sprite_lists["deadly"]:
-            if deadly_tile.collides_with_point(self.player.position):
-                self.player.lives -= 1
-                self.reset()
+        # Only check if player does not ride something, because ridable objects can be on top of deadly tiles
+        if self.player.rides_on == None:
+            for deadly_tile in self.map.sprite_lists["deadly"]:
+                if deadly_tile.collides_with_point(self.player.position):
+                    self.player.lives -= 1
+                    self.reset()
 
         # Update the timer
         self.timer -= delta_time
@@ -418,9 +452,13 @@ class GameView(arcade.View):
             self.right_pressed = True
             new_pp = (new_pp[0] + TILE_SIZE, new_pp[1])
 
+        # if the player is riding on something
+        if self.player.rides_on != None:
+            self.player.rides_on = None   
+
         self.pe.set_position(
             sprite=self.player,
-            position=new_pp,
+            position=self.snap_to_map_coordinates(new_pp[0], new_pp[1]),
         )
 
         if key == FIRE_KEY:
