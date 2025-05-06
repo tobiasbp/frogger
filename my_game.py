@@ -142,6 +142,7 @@ class GameView(arcade.View):
                 # Only doable with pre_handler and begin_handler
                 return False
             else:
+                self.player.lives -= 1
                 self.reset()
 
                 # Returns False to avoid physics engine pushing objects in werid directions
