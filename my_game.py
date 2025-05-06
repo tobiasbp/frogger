@@ -65,6 +65,10 @@ class GameView(arcade.View):
                 center_x = layer_tile.center_x,
                 center_y = layer_tile.center_y,
             )
+            self.pe.add_sprite(
+                sprite=new_goal_sprite,
+                collision_type="goal",
+            )
             self.goal_sprite_list.append(new_goal_sprite)
 
     def get_tiles_from_screen_coordinate(self, screen_x, screen_y):
@@ -149,6 +153,12 @@ class GameView(arcade.View):
             
 
 
+    def handler_player_goal(self, player, goal, _arbiter, _space, _data):
+        # remove the goal and return player to start
+        print(f"Goal Collected! Only {len(self.goal_sprite_list)} left!")
+        goal.kill()
+        self.reset()
+
     def draw_time_bar(self):
         """
         Draw the bar indicating time left to clear the level.
@@ -229,6 +239,12 @@ class GameView(arcade.View):
             "object",
             # Has to be begin_handler or pre_handler to make avoid collision possible
             begin_handler = self.handler_player_object,
+        )
+        self.pe.add_collision_handler(
+            "player",
+            "goal",
+            # using begin handler which is the first time they touch because goal should disappear after collision
+            begin_handler = self.handler_player_goal,
         )
 
         self.map = self.load_map()
@@ -386,9 +402,6 @@ class GameView(arcade.View):
                     position=(o.center_x, SCREEN_HEIGHT+TILE_SIZE/2)
                 )
 
-        for g in goal_hit_list:
-            # Remove the goal
-            g.remove_from_sprite_lists()
 
         # The game is over when the player touches all goals
         if not any(self.goal_sprite_list):
