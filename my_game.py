@@ -233,7 +233,7 @@ class GameView(arcade.View):
         )
 
         # Sets the position of the player which is made as a layer on the map
-        for pos in self.map.sprite_lists["start-pos"][0]:
+        for pos in self.map.sprite_lists["start-pos"]:
             self.player.position = pos.position
         
         self.player.texture = self.load_tilemap_textures[106]
