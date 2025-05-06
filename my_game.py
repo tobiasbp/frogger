@@ -218,7 +218,8 @@ class GameView(arcade.View):
         self.pe.add_collision_handler(
             "player",
             "goal",
-            pre_handler = self.handler_player_goal,
+            # using begin handler which is the first time they touch because goal should disappear after collision
+            begin_handler = self.handler_player_goal,
         )
 
         self.map = self.load_map()
