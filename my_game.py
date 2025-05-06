@@ -232,11 +232,13 @@ class GameView(arcade.View):
             scale=SPRITE_SCALING,
         )
 
-        # Sets the position of the player which is made as a layer on the map
-        for pos in self.map.sprite_lists["start-pos"]:
-            self.player.position = pos.position
-        
-        self.player.texture = self.load_tilemap_textures[106]
+        # Variable of player 1's start pos layer.
+        player_start_p_tile = self.map.sprite_lists["start-pos"][0]
+
+        # Sets the position of the player which is made as a layer in Tiled
+        self.player.position = player_start_p_tile.position
+        # Sets the texture of the player which is made as a layer in Tiled
+        self.player.texture = player_start_p_tile.texture
 
         # Let physics engine control player sprite
         self.pe.add_sprite(
