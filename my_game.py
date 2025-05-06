@@ -135,8 +135,6 @@ class GameView(arcade.View):
         goal.kill()
         self.reset()
 
-        return False
-
     def draw_time_bar(self):
         """
         Draw the bar indicating time left to clear the level.
