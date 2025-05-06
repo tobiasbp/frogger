@@ -231,6 +231,10 @@ class GameView(arcade.View):
             max_x_pos=SCREEN_WIDTH,
             scale=SPRITE_SCALING,
         )
+
+        # Sets the position of the player which is made as a layer on the map
+        for pos in self.map.sprite_lists["start-pos"][0]:
+            self.player.position = pos.position
         
         self.player.texture = self.load_tilemap_textures[106]
 
