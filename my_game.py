@@ -125,16 +125,20 @@ class GameView(arcade.View):
 
 
     def handler_player_object(self, player, object, _arbiter, _space, _data):
-        #self.reset()
-
+        
+        
         if self.player.rides_on == None:
             # Checks if objects is "ridable". Player gets object in variable "rides_on"
             if object.properties.get("ridable", False):
                 player.rides_on = object
 
-        # Returns False to ignore collision
-        # Only doable with pre_handler and begin_handler
-        return False
+                # Returns False to ignore collision
+                # Only doable with pre_handler and begin_handler
+                return False
+            else:
+                self.reset()
+                return False
+            
 
 
     def on_show_view(self):
