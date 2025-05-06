@@ -111,7 +111,7 @@
     <property name="x-speed" type="int" value="25"/>
    </properties>
   </object>
-  <object id="6" gid="2147483806" x="160.199" y="95.7562" width="16" height="16">
+  <object id="6" gid="2147483806" x="160" y="95" width="16" height="16">
    <properties>
     <property name="deadly" type="bool" value="false"/>
     <property name="ridable" type="bool" value="true"/>
