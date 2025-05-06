@@ -137,6 +137,8 @@ class GameView(arcade.View):
                 return False
             else:
                 self.reset()
+
+                # Returns False to avoid physics engine pushing objects in werid directions
                 return False
             
 
