@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="7">
+<map version="1.10" tiledversion="1.11.1-99-gec89c545" orientation="orthogonal" renderorder="right-down" width="15" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="48">
  <tileset firstgid="1" source="sampleSheet.tsx"/>
  <layer id="6" name="background" width="15" height="18" locked="1">
   <data encoding="csv">
@@ -104,18 +104,179 @@
     <property name="x-speed" type="int" value="-50"/>
    </properties>
   </object>
-  <object id="5" gid="158" x="144" y="126" width="16" height="16">
+  <object id="5" gid="158" x="160.667" y="127" width="16" height="16">
    <properties>
     <property name="deadly" type="bool" value="false"/>
     <property name="ridable" type="bool" value="true"/>
-    <property name="x-speed" type="int" value="25"/>
+    <property name="x-speed" type="int" value="0"/>
    </properties>
   </object>
-  <object id="6" gid="2147483806" x="160" y="95" width="16" height="16">
+  <object id="7" gid="2147483806" x="161.333" y="78" width="16" height="16">
    <properties>
     <property name="deadly" type="bool" value="false"/>
     <property name="ridable" type="bool" value="true"/>
-    <property name="x-speed" type="int" value="-25"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="8" gid="2147483806" x="161.333" y="111.333" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="9" gid="2147483806" x="160.667" y="66" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="10" gid="158" x="160.333" y="95.3333" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="28" gid="158" x="16.6667" y="127" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="29" gid="2147483806" x="18.6667" y="78.3335" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="30" gid="2147483806" x="20.6667" y="110.333" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="31" gid="2147483806" x="17.9997" y="66.3335" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="32" gid="158" x="19.6667" y="95.6668" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="33" gid="158" x="61.3333" y="127" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="34" gid="2147483806" x="63.3333" y="79.6668" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="35" gid="2147483806" x="65.3333" y="111.667" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="36" gid="2147483806" x="62.6663" y="67.6668" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="37" gid="158" x="63" y="95.6668" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="38" gid="158" x="110" y="127" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="39" gid="2147483806" x="112" y="75.6668" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="40" gid="2147483806" x="112" y="111.667" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="41" gid="2147483806" x="111.334" y="63.6668" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="42" gid="158" x="111" y="93.0001" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="43" gid="158" x="207.333" y="127.667" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="44" gid="2147483806" x="206.667" y="81.0001" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="45" gid="2147483806" x="208.667" y="113" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="46" gid="2147483806" x="206.001" y="63.6667" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="47" gid="158" x="208.333" y="97" width="16" height="16">
+   <properties>
+    <property name="deadly" type="bool" value="false"/>
+    <property name="ridable" type="bool" value="true"/>
+    <property name="x-speed" type="int" value="0"/>
    </properties>
   </object>
  </objectgroup>
