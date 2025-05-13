@@ -112,6 +112,7 @@ class GameView(arcade.View):
                     position,
                 )
 
+
         # Add cars (moving objects)
         for object in self.map.sprite_lists["moving-objects"]:
             # Add cars to physics engine. We may not want this
@@ -134,6 +135,10 @@ class GameView(arcade.View):
         self.timer = LEVEL_TIME
 
 
+    def on_player_death(self, p):
+        p.lives -= 1
+
+
     def handler_player_object(self, player, object, _arbiter, _space, _data):
         
         
@@ -146,6 +151,7 @@ class GameView(arcade.View):
                 # Only doable with pre_handler and begin_handler
                 return False
             else:
+                self.on_player_death(self.player)
                 self.reset()
 
                 # Returns False to avoid physics engine pushing objects in werid directions
@@ -248,8 +254,6 @@ class GameView(arcade.View):
         )
 
         self.map = self.load_map()
-
-        self.timer = 0
 
 
         # Set up the player info
@@ -412,7 +416,7 @@ class GameView(arcade.View):
         if self.player.rides_on == None:
             for deadly_tile in self.map.sprite_lists["deadly"]:
                 if deadly_tile.collides_with_point(self.player.position):
-                    self.player.lives -= 1
+                    self.on_player_death(self.player)
                     self.reset()
 
         # Update the timer
@@ -424,9 +428,8 @@ class GameView(arcade.View):
 
         # checks if player is outside of screen
         if not (0 < self.player.center_x < SCREEN_WIDTH) or not (0 < self.player.center_y < SCREEN_HEIGHT):
-            self.player.lives -= 1
+            self.on_player_death(self.player)
             self.reset()
-                
 
     def game_over(self):
         """
