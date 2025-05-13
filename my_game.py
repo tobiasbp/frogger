@@ -97,7 +97,7 @@ class GameView(arcade.View):
             (((screen_y//TILE_SIZE) * TILE_SIZE) + (TILE_SIZE/2)),
         )
 
-    def reset(self):
+    def reset(self, reset_goals=False):
         """
         Level is reset
         """
@@ -131,6 +131,11 @@ class GameView(arcade.View):
                 )
             )
 
+        if reset_goals:
+            # Add goals
+            self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
+            self.add_goals()
+
         # Reset timer
         self.timer = LEVEL_TIME
 
@@ -146,16 +151,13 @@ class GameView(arcade.View):
             # Checks if objects is "ridable". Player gets object in variable "rides_on"
             if object.properties.get("ridable", False):
                 player.rides_on = object
-
-                # Returns False to ignore collision
-                # Only doable with pre_handler and begin_handler
-                return False
+                
             else:
                 self.on_player_death(self.player)
                 self.reset()
 
-                # Returns False to avoid physics engine pushing objects in werid directions
-                return False
+        # Physics engine shouldn't do anything when this collision happens
+        return False
             
 
 
@@ -324,12 +326,8 @@ class GameView(arcade.View):
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
 
-        # Add goals
-        self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
-        self.add_goals()
-
         # Set player position, cars and timer
-        self.reset()
+        self.reset(reset_goals=True)
 
     def on_draw(self):
         """
