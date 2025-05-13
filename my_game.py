@@ -9,6 +9,7 @@ Artwork from https://kenney.nl/assets/space-shooter-redux
 import random
 
 import arcade
+import arcade.gui
 
 # Import sprites from local file my_sprites.py
 from my_sprites import Player, PlayerShot
@@ -517,11 +518,37 @@ class IntroView(arcade.View):
         """
 
         # Set the background color
-        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+        arcade.set_background_color(arcade.csscolor.FOREST_GREEN)
 
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
+
+        # When making buttons, you always have to make a manager and enable it.
+        self.manager = arcade.gui.UIManager()
+        self.manager.enable()
+
+        # Make the Layout UI box designer, that aligns the buttons up perfectly.
+        self.v_box = arcade.gui.UIBoxLayout(space_between=30)
+
+        # Make the buttons, start button so far is only one that can be used.
+        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200,)
+        settings_button = arcade.gui.UIFlatButton(text="Settings", width=200)
+
+        # Add it to the UIBoxLayout, so it will get perfectly aligned with other buttons.
+        self.v_box.add(start_button)
+        self.v_box.add(settings_button)
+
+        # Create a widget to hold the v_box widget, that will center the buttons
+        self.manager.add(
+            arcade.gui.UIAnchorWidget(
+                anchor_x="center_x",
+                anchor_y="center_y",
+                align_y=-50,  # Pulls the anchor down, it's not too high, can be adjusted
+                child=self.v_box)
+        )
+        # If you press the start button the game starts.
+        start_button.on_click = self.on_click_start
 
     def on_draw(self):
         """
@@ -529,29 +556,41 @@ class IntroView(arcade.View):
         """
         self.clear()
 
+        # Draw all buttons.
+        self.manager.draw()
+
         # Draw some text
         arcade.draw_text(
-            "Instructions Screen",
+            "Frogger",
             self.window.width / 2,
-            self.window.height / 2,
+            self.window.height / 1.5,
             arcade.color.WHITE,
             font_size=50,
-            anchor_x="center",
+            font_name="Kenney Blocks",
+            anchor_x="center"
         )
 
         # Draw more text
         arcade.draw_text(
-            "Press any key to start the game",
+            "Or press any key to start",
             self.window.width / 2,
-            self.window.height / 2 - 75,
+            self.window.height / 10,
             arcade.color.WHITE,
-            font_size=20,
+            font_size=10,
             anchor_x="center",
+            font_name="Kennedy Blocks"
         )
 
     def on_key_press(self, key: int, modifiers: int):
         """
         Start the game when any key is pressed
+        """
+        game_view = GameView()
+        self.window.show_view(game_view)
+
+    def on_click_start(self, event):
+        """
+        Start the game when start button is clicked
         """
         game_view = GameView()
         self.window.show_view(game_view)
@@ -629,6 +668,7 @@ def main():
     """
     # Create a window to hold views
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT)
+    arcade.Window.center_window(window)
 
     # Game starts in the intro view
     start_view = IntroView()
