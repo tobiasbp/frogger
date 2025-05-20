@@ -162,7 +162,7 @@ class GameView(arcade.View):
 
         # Physics engine shouldn't do anything when this collision happens
         return False
-            
+
 
 
     def handler_player_goal(self, player, goal, _arbiter, _space, _data):
@@ -430,8 +430,10 @@ class GameView(arcade.View):
         if self.player.rides_on == None:
             for deadly_tile in self.map.sprite_lists["deadly"]:
                 if deadly_tile.collides_with_point(self.player.position):
-                    self.on_player_death(self.player)
-                    self.reset()
+                    #self.on_player_death(self.player)
+                    #print("water!")
+                    #self.reset()
+                    pass
 
         # Update the timer
         self.timer -= delta_time
@@ -482,9 +484,11 @@ class GameView(arcade.View):
             self.right_pressed = True
             new_pp = (new_pp[0] + TILE_SIZE, new_pp[1])
 
+
+        # FIX ME: should only be changed to None when moving, not on any key
         # if the player is riding on something
         if self.player.rides_on != None:
-            self.player.rides_on = None   
+            self.player.rides_on = None 
 
         self.pe.set_position(
             sprite=self.player,
