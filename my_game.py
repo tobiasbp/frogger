@@ -433,7 +433,9 @@ class GameView(arcade.View):
                     #self.on_player_death(self.player)
                     #print("water!")
                     #self.reset()
+                    # FIXME: this should not say pass. This should work. This is not working. Player should die when touching water without coming in conflict with the "riding on" thing
                     pass
+
 
         # Update the timer
         self.timer -= delta_time
