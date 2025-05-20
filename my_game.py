@@ -62,7 +62,7 @@ class GameView(arcade.View):
             # /4 tile offset considering neither tile nor goal sprite has position in the center
             new_goal_sprite = arcade.Sprite(
                 texture=self.load_tilemap_textures[100],
-                scale=SPRITE_SCALING, 
+                scale=SPRITE_SCALING,
                 center_x = layer_tile.center_x,
                 center_y = layer_tile.center_y,
             )
@@ -88,7 +88,7 @@ class GameView(arcade.View):
                 if self.map.get_cartesian(tile.center_x, tile.center_y) == map_coordinate:
                     tiles.append(layer_name)
         return tiles
-    
+
     def snap_to_map_coordinates(self, screen_x, screen_y):
         """
         Get coordinate of tile that is closest to position
@@ -122,7 +122,7 @@ class GameView(arcade.View):
                 # body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
                 collision_type="object",
                 )
-            
+
             self.pe.set_velocity(
                 sprite=object,
                 velocity=(
@@ -136,8 +136,8 @@ class GameView(arcade.View):
 
 
     def handler_player_object(self, player, object, _arbiter, _space, _data):
-        
-        
+
+
         if self.player.rides_on == None:
             # Checks if objects is "ridable". Player gets object in variable "rides_on"
             if object.properties.get("ridable", False):
@@ -151,7 +151,7 @@ class GameView(arcade.View):
 
                 # Returns False to avoid physics engine pushing objects in werid directions
                 return False
-            
+
 
 
     def handler_player_goal(self, player, goal, _arbiter, _space, _data):
@@ -427,7 +427,7 @@ class GameView(arcade.View):
         if not (0 < self.player.center_x < SCREEN_WIDTH) or not (0 < self.player.center_y < SCREEN_HEIGHT):
             self.player.lives -= 1
             self.reset()
-                
+
 
     def game_over(self):
         """
@@ -468,7 +468,7 @@ class GameView(arcade.View):
 
         # if the player is riding on something
         if self.player.rides_on != None:
-            self.player.rides_on = None   
+            self.player.rides_on = None
 
         self.pe.set_position(
             sprite=self.player,
@@ -531,8 +531,22 @@ class IntroView(arcade.View):
         # Make the Layout UI box designer, that aligns the buttons up perfectly.
         self.v_box = arcade.gui.UIBoxLayout(space_between=30)
 
+        button_style = {
+            "font_name": ("Kenney Blocks", "Kenney Pixel"),
+            "font_size": 18,
+            "font_color": arcade.color.WHITE,
+            "border_width": 5,
+            "border_color": arcade.color.GO_GREEN,
+            "bg_color": arcade.color.BLUEBONNET,
+
+            # used if button is pressed
+            "bg_color_pressed": arcade.color.WHITE,
+            "border_color_pressed": arcade.color.GREEN,  # also used when hovered
+            "font_color_pressed": arcade.color.BLACK,
+        }
+
         # Make the buttons, start button so far is only one that can be used.
-        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200,)
+        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200, style=button_style)
         # settings_button = arcade.gui.UIFlatButton(text="Settings", width=200)
 
         # Add it to the UIBoxLayout, so it will get perfectly aligned with other buttons.
