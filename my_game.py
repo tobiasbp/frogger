@@ -533,11 +533,11 @@ class IntroView(arcade.View):
 
         # Make the buttons, start button so far is only one that can be used.
         start_button = arcade.gui.UIFlatButton(text="Start Game", width=200,)
-        settings_button = arcade.gui.UIFlatButton(text="Settings", width=200)
+        # settings_button = arcade.gui.UIFlatButton(text="Settings", width=200)
 
         # Add it to the UIBoxLayout, so it will get perfectly aligned with other buttons.
         self.v_box.add(start_button)
-        self.v_box.add(settings_button)
+        # self.v_box.add(settings_button)
 
         # Create a widget to hold the v_box widget, that will center the buttons
         self.manager.add(
@@ -581,19 +581,24 @@ class IntroView(arcade.View):
             font_name="Kennedy Blocks"
         )
 
+    def GameStart(self):
+        """
+        Starts the game.
+        """
+        game_view = GameView()
+        self.window.show_view(game_view)
+
     def on_key_press(self, key: int, modifiers: int):
         """
         Start the game when any key is pressed
         """
-        game_view = GameView()
-        self.window.show_view(game_view)
+        self.GameStart()
 
     def on_click_start(self, event):
         """
         Start the game when start button is clicked
         """
-        game_view = GameView()
-        self.window.show_view(game_view)
+        self.GameStart()
 
 
 class GameOverView(arcade.View):
@@ -668,7 +673,6 @@ def main():
     """
     # Create a window to hold views
     window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT)
-    arcade.Window.center_window(window)
 
     # Game starts in the intro view
     start_view = IntroView()
