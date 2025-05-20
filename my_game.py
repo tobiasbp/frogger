@@ -162,7 +162,7 @@ class GameView(arcade.View):
 
         # Physics engine shouldn't do anything when this collision happens
         return False
-            
+
 
 
     def handler_player_goal(self, player, goal, _arbiter, _space, _data):
@@ -170,6 +170,10 @@ class GameView(arcade.View):
         print(f"Goal Collected! Only {len(self.goal_sprite_list)} left!")
         goal.kill()
         self.reset()
+        return False
+    
+    def handler_object_object(self, object1, object2, _arbiter, _space, _data):
+        # Tell the physics enginge not to do anything
         return False
 
     def draw_time_bar(self):
@@ -258,6 +262,13 @@ class GameView(arcade.View):
             "goal",
             # using begin handler which is the first time they touch because goal should disappear after collision
             begin_handler = self.handler_player_goal,
+        )
+
+        self.pe.add_collision_handler(
+            "object",
+            "object",
+            # Begin handler to be able to tell pe not to do anything
+            begin_handler=self.handler_object_object
         )
 
         self.map = self.load_map()
@@ -419,8 +430,12 @@ class GameView(arcade.View):
         if self.player.rides_on == None:
             for deadly_tile in self.map.sprite_lists["deadly"]:
                 if deadly_tile.collides_with_point(self.player.position):
-                    self.on_player_death(self.player)
-                    self.reset()
+                    #self.on_player_death(self.player)
+                    #print("water!")
+                    #self.reset()
+                    # FIXME: this should not say pass. This should work. This is not working. Player should die when touching water without coming in conflict with the "riding on" thing
+                    pass
+
 
         # Update the timer
         self.timer -= delta_time
@@ -471,9 +486,11 @@ class GameView(arcade.View):
             self.right_pressed = True
             new_pp = (new_pp[0] + TILE_SIZE, new_pp[1])
 
+
+        # FIX ME: should only be changed to None when moving, not on any key
         # if the player is riding on something
         if self.player.rides_on != None:
-            self.player.rides_on = None   
+            self.player.rides_on = None 
 
         self.pe.set_position(
             sprite=self.player,
