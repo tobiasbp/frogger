@@ -171,6 +171,10 @@ class GameView(arcade.View):
         goal.kill()
         self.reset()
         return False
+    
+    def handler_object_object(self, object1, object2, _arbiter, _space, _data):
+        # Tell the physics enginge not to do anything
+        return False
 
     def draw_time_bar(self):
         """
@@ -258,6 +262,13 @@ class GameView(arcade.View):
             "goal",
             # using begin handler which is the first time they touch because goal should disappear after collision
             begin_handler = self.handler_player_goal,
+        )
+
+        self.pe.add_collision_handler(
+            "object",
+            "object",
+            # Begin handler to be able to tell pe not to do anything
+            begin_handler=self.handler_object_object
         )
 
         self.map = self.load_map()
