@@ -45,7 +45,7 @@ UI_TEXT_FONT = "Kenney Blocks"
 
 # Style for the UI buttons
 UI_BUTTON_STYLE = {
-    "font_name": (UI_TEXT_FONT, "Kenney Pixel"),
+    "font_name": UI_TEXT_FONT,
     "font_size": 18,
     "font_color": arcade.color.WHITE,
     "border_width": 5,
