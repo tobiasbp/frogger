@@ -9,6 +9,7 @@ Artwork from https://kenney.nl/assets/space-shooter-redux
 import random
 
 import arcade
+import arcade.gui
 
 # Import sprites from local file my_sprites.py
 from my_sprites import Player, PlayerShot
@@ -39,6 +40,24 @@ TIME_BAR_HEIGHT = 20
 TIME_BAR_X = (SCREEN_WIDTH - TIME_BAR_WIDTH) // 2
 TIME_BAR_Y = 35
 
+# Font style
+UI_TEXT_FONT = "Kenney Blocks"
+
+# Style for the UI buttons
+UI_BUTTON_STYLE = {
+    "font_name": UI_TEXT_FONT,
+    "font_size": 18,
+    "font_color": arcade.color.WHITE,
+    "border_width": 5,
+    "border_color": arcade.color.GO_GREEN,
+    "bg_color": arcade.color.BLUEBONNET,
+
+    # used if button is pressed
+    "bg_color_pressed": arcade.color.WHITE,
+    "border_color_pressed": arcade.color.GREEN,  # also used when hovered
+    "font_color_pressed": arcade.color.BLACK,
+}
+
 
 class GameView(arcade.View):
     """
@@ -61,7 +80,7 @@ class GameView(arcade.View):
             # /4 tile offset considering neither tile nor goal sprite has position in the center
             new_goal_sprite = arcade.Sprite(
                 texture=self.load_tilemap_textures[100],
-                scale=SPRITE_SCALING, 
+                scale=SPRITE_SCALING,
                 center_x = layer_tile.center_x,
                 center_y = layer_tile.center_y,
             )
@@ -87,7 +106,7 @@ class GameView(arcade.View):
                 if self.map.get_cartesian(tile.center_x, tile.center_y) == map_coordinate:
                     tiles.append(layer_name)
         return tiles
-    
+
     def snap_to_map_coordinates(self, screen_x, screen_y):
         """
         Get coordinate of tile that is closest to position
@@ -122,7 +141,7 @@ class GameView(arcade.View):
                 # body_type=arcade.PymunkPhysicsEngine.KINEMATIC,
                 collision_type="object",
                 )
-            
+
             self.pe.set_velocity(
                 sprite=object,
                 velocity=(
@@ -149,8 +168,8 @@ class GameView(arcade.View):
 
 
     def handler_player_object(self, player, object, _arbiter, _space, _data):
-        
-        
+
+
         if self.player.rides_on == None:
             # Checks if objects is "ridable". Player gets object in variable "rides_on"
             if object.properties.get("ridable", False):
@@ -490,7 +509,8 @@ class GameView(arcade.View):
         # FIX ME: should only be changed to None when moving, not on any key
         # if the player is riding on something
         if self.player.rides_on != None:
-            self.player.rides_on = None 
+            self.player.rides_on = None
+
 
         self.pe.set_position(
             sprite=self.player,
@@ -540,11 +560,37 @@ class IntroView(arcade.View):
         """
 
         # Set the background color
-        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
+        arcade.set_background_color(arcade.csscolor.FOREST_GREEN)
 
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
+
+        # When making buttons, you always have to make a manager and enable it.
+        self.manager = arcade.gui.UIManager()
+        self.manager.enable()
+
+        # Make the Layout UI box designer, that aligns the buttons up perfectly.
+        self.v_box = arcade.gui.UIBoxLayout(space_between=30)
+
+        # Make the buttons, start button so far is only one that can be used.
+        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200, style=UI_BUTTON_STYLE)
+        # settings_button = arcade.gui.UIFlatButton(text="Settings", width=200, style=BUTTON_STYLE)
+
+        # Add it to the UIBoxLayout, so it will get perfectly aligned with other buttons.
+        self.v_box.add(start_button)
+        # self.v_box.add(settings_button)
+
+        # Create a widget to hold the v_box widget, that will center the buttons
+        self.manager.add(
+            arcade.gui.UIAnchorWidget(
+                anchor_x="center_x",
+                anchor_y="center_y",
+                align_y=-50,  # Pulls the anchor down, it's not too high, can be adjusted
+                child=self.v_box)
+        )
+        # If you press the start button the game starts.
+        start_button.on_click = self.on_click_start
 
     def on_draw(self):
         """
@@ -552,32 +598,49 @@ class IntroView(arcade.View):
         """
         self.clear()
 
+        # Draw all buttons.
+        self.manager.draw()
+
         # Draw some text
         arcade.draw_text(
-            "Instructions Screen",
+            "Frogger",
             self.window.width / 2,
-            self.window.height / 2,
+            self.window.height / 1.5,
             arcade.color.WHITE,
             font_size=50,
+            font_name=UI_TEXT_FONT,
             anchor_x="center",
         )
 
         # Draw more text
         arcade.draw_text(
-            "Press any key to start the game",
+            "Or press any key to start",
             self.window.width / 2,
-            self.window.height / 2 - 75,
+            self.window.height / 10,
             arcade.color.WHITE,
-            font_size=20,
+            font_size=10,
             anchor_x="center",
+            font_name="Kenney Pixel"
         )
+
+    def GameStart(self):
+        """
+        Starts the game.
+        """
+        game_view = GameView()
+        self.window.show_view(game_view)
 
     def on_key_press(self, key: int, modifiers: int):
         """
         Start the game when any key is pressed
         """
-        game_view = GameView()
-        self.window.show_view(game_view)
+        self.GameStart()
+
+    def on_click_start(self, event):
+        """
+        Start the game when start button is clicked
+        """
+        self.GameStart()
 
 
 class GameOverView(arcade.View):
