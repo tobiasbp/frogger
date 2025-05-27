@@ -40,6 +40,21 @@ TIME_BAR_HEIGHT = 20
 TIME_BAR_X = (SCREEN_WIDTH - TIME_BAR_WIDTH) // 2
 TIME_BAR_Y = 35
 
+# Style for the UI buttons
+BUTTON_STYLE = {
+    "font_name": ("Kenney Blocks", "Kenney Pixel"),
+    "font_size": 18,
+    "font_color": arcade.color.WHITE,
+    "border_width": 5,
+    "border_color": arcade.color.GO_GREEN,
+    "bg_color": arcade.color.BLUEBONNET,
+
+    # used if button is pressed
+    "bg_color_pressed": arcade.color.WHITE,
+    "border_color_pressed": arcade.color.GREEN,  # also used when hovered
+    "font_color_pressed": arcade.color.BLACK,
+}
+
 
 class GameView(arcade.View):
     """
@@ -531,23 +546,9 @@ class IntroView(arcade.View):
         # Make the Layout UI box designer, that aligns the buttons up perfectly.
         self.v_box = arcade.gui.UIBoxLayout(space_between=30)
 
-        button_style = {
-            "font_name": ("Kenney Blocks", "Kenney Pixel"),
-            "font_size": 18,
-            "font_color": arcade.color.WHITE,
-            "border_width": 5,
-            "border_color": arcade.color.GO_GREEN,
-            "bg_color": arcade.color.BLUEBONNET,
-
-            # used if button is pressed
-            "bg_color_pressed": arcade.color.WHITE,
-            "border_color_pressed": arcade.color.GREEN,  # also used when hovered
-            "font_color_pressed": arcade.color.BLACK,
-        }
-
         # Make the buttons, start button so far is only one that can be used.
-        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200, style=button_style)
-        # settings_button = arcade.gui.UIFlatButton(text="Settings", width=200)
+        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200, style=BUTTON_STYLE)
+        # settings_button = arcade.gui.UIFlatButton(text="Settings", width=200, style=BUTTON_STYLE)
 
         # Add it to the UIBoxLayout, so it will get perfectly aligned with other buttons.
         self.v_box.add(start_button)
