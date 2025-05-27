@@ -113,7 +113,7 @@ class GameView(arcade.View):
             (((screen_y//TILE_SIZE) * TILE_SIZE) + (TILE_SIZE/2)),
         )
 
-    def reset(self):
+    def reset(self, reset_goals=False):
         """
         Level is reset
         """
@@ -127,6 +127,7 @@ class GameView(arcade.View):
                     self.player,
                     position,
                 )
+
 
         # Add cars (moving objects)
         for object in self.map.sprite_lists["moving-objects"]:
@@ -146,8 +147,21 @@ class GameView(arcade.View):
                 )
             )
 
+        if reset_goals:
+            # Add goals
+            self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
+            self.add_goals()
+
         # Reset timer
         self.timer = LEVEL_TIME
+
+    def next_level(self):
+        self.reset(reset_goals=True)
+        print("You reached the next level!!! :)")
+
+
+    def on_player_death(self, p):
+        p.lives -= 1
 
 
     def handler_player_object(self, player, object, _arbiter, _space, _data):
@@ -157,16 +171,14 @@ class GameView(arcade.View):
             # Checks if objects is "ridable". Player gets object in variable "rides_on"
             if object.properties.get("ridable", False):
                 player.rides_on = object
-
-                # Returns False to ignore collision
-                # Only doable with pre_handler and begin_handler
-                return False
+                
             else:
+                self.on_player_death(self.player)
                 self.reset()
 
-                # Returns False to avoid physics engine pushing objects in werid directions
-                return False
-
+        # Physics engine shouldn't do anything when this collision happens
+        return False
+            
 
 
     def handler_player_goal(self, player, goal, _arbiter, _space, _data):
@@ -174,6 +186,7 @@ class GameView(arcade.View):
         print(f"Goal Collected! Only {len(self.goal_sprite_list)} left!")
         goal.kill()
         self.reset()
+        return False
 
     def draw_time_bar(self):
         """
@@ -265,8 +278,6 @@ class GameView(arcade.View):
 
         self.map = self.load_map()
 
-        self.timer = 0
-
 
         # Set up the player info
         self.player_score = 0
@@ -336,12 +347,8 @@ class GameView(arcade.View):
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
 
-        # Add goals
-        self.goal_sprite_list = arcade.SpriteList(use_spatial_hash=False)
-        self.add_goals()
-
         # Set player position, cars and timer
-        self.reset()
+        self.next_level()
 
     def on_draw(self):
         """
@@ -389,7 +396,7 @@ class GameView(arcade.View):
                 position=self.player.rides_on.position,
                 )
 
-        goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
+        #goal_hit_list = arcade.check_for_collision_with_list(self.player, self.goal_sprite_list)
 
         # Check if objects should wrap
         for o in self.map.sprite_lists["moving-objects"]:
@@ -421,14 +428,14 @@ class GameView(arcade.View):
 
         # The game is over when the player touches all goals
         if not any(self.goal_sprite_list):
-            self.game_over()
+            self.next_level()
 
         # Check if player dies when touching "deadly" tile
         # Only check if player does not ride something, because ridable objects can be on top of deadly tiles
         if self.player.rides_on == None:
             for deadly_tile in self.map.sprite_lists["deadly"]:
                 if deadly_tile.collides_with_point(self.player.position):
-                    self.player.lives -= 1
+                    self.on_player_death(self.player)
                     self.reset()
 
         # Update the timer
@@ -440,9 +447,8 @@ class GameView(arcade.View):
 
         # checks if player is outside of screen
         if not (0 < self.player.center_x < SCREEN_WIDTH) or not (0 < self.player.center_y < SCREEN_HEIGHT):
-            self.player.lives -= 1
+            self.on_player_death(self.player)
             self.reset()
-
 
     def game_over(self):
         """
