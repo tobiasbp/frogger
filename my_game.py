@@ -40,9 +40,12 @@ TIME_BAR_HEIGHT = 20
 TIME_BAR_X = (SCREEN_WIDTH - TIME_BAR_WIDTH) // 2
 TIME_BAR_Y = 35
 
+# Font style
+UI_TEXT_FONT = "Kenney Blocks"
+
 # Style for the UI buttons
-BUTTON_STYLE = {
-    "font_name": ("Kenney Blocks", "Kenney Pixel"),
+UI_BUTTON_STYLE = {
+    "font_name": (UI_TEXT_FONT, "Kenney Pixel"),
     "font_size": 18,
     "font_color": arcade.color.WHITE,
     "border_width": 5,
@@ -553,7 +556,7 @@ class IntroView(arcade.View):
         self.v_box = arcade.gui.UIBoxLayout(space_between=30)
 
         # Make the buttons, start button so far is only one that can be used.
-        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200, style=BUTTON_STYLE)
+        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200, style=UI_BUTTON_STYLE)
         # settings_button = arcade.gui.UIFlatButton(text="Settings", width=200, style=BUTTON_STYLE)
 
         # Add it to the UIBoxLayout, so it will get perfectly aligned with other buttons.
@@ -587,8 +590,8 @@ class IntroView(arcade.View):
             self.window.height / 1.5,
             arcade.color.WHITE,
             font_size=50,
-            font_name="Kenney Blocks",
-            anchor_x="center"
+            font_name=UI_TEXT_FONT,
+            anchor_x="center",
         )
 
         # Draw more text
@@ -599,7 +602,7 @@ class IntroView(arcade.View):
             arcade.color.WHITE,
             font_size=10,
             anchor_x="center",
-            font_name="Kennedy Blocks"
+            font_name="Kenney Pixel"
         )
 
     def GameStart(self):
