@@ -734,8 +734,8 @@ class GameOverView(arcade.View):
         """
         Starts the game.
         """
-        game_view = GameView()
-        self.window.show_view(game_view)
+        intro_view = IntroView()
+        self.window.show_view(intro_view)
 
     def on_key_press(self, key: int, modifiers: int):
         """
