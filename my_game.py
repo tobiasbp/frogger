@@ -668,11 +668,35 @@ class GameOverView(arcade.View):
         """
 
         # Set the background color
-        arcade.set_background_color(arcade.csscolor.DARK_GOLDENROD)
+        arcade.set_background_color(arcade.csscolor.DARK_GREEN)
 
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
         arcade.set_viewport(0, self.window.width, 0, self.window.height)
+
+        # When making buttons, you always have to make a manager and enable it.
+        self.manager = arcade.gui.UIManager()
+        self.manager.enable()
+
+        # Make the Layout UI box designer, that aligns the buttons up perfectly.
+        self.v_box = arcade.gui.UIBoxLayout(space_between=30)
+
+        # Make the buttons, start button so far is only one that can be used.
+        retry_button = arcade.gui.UIFlatButton(text="Retry", width=200, style=UI_BUTTON_STYLE)
+
+        # Add it to the UIBoxLayout, so it will get perfectly aligned with other buttons.
+        self.v_box.add(retry_button)
+
+        # Create a widget to hold the v_box widget, that will center the buttons
+        self.manager.add(
+            arcade.gui.UIAnchorWidget(
+                anchor_x="center_x",
+                anchor_y="center_y",
+                align_y=-50,  # Pulls the anchor down, it's not too high, can be adjusted
+                child=self.v_box)
+        )
+        # If you press the start button the game starts.
+        retry_button.on_click = self.on_click_retry
 
     def on_draw(self):
         """
@@ -681,32 +705,49 @@ class GameOverView(arcade.View):
 
         self.clear()
 
+        # Draw the button(s)
+        self.manager.draw()
+
         # Draw some text
         arcade.draw_text(
             "Game over!",
             self.window.width / 2,
-            self.window.height / 2,
+            self.window.height / 1.5,
             arcade.color.WHITE,
             font_size=50,
             anchor_x="center",
+            font_name=UI_TEXT_FONT
         )
 
         # Draw player's score
         arcade.draw_text(
             f"Your score: {self.score}",
             self.window.width / 2,
-            self.window.height / 2 - 75,
+            self.window.height - 75,
             arcade.color.WHITE,
             font_size=20,
             anchor_x="center",
+            font_name=UI_TEXT_FONT
         )
+
+    def GameStart(self):
+        """
+        Starts the game.
+        """
+        intro_view = IntroView()
+        self.window.show_view(intro_view)
 
     def on_key_press(self, key: int, modifiers: int):
         """
         Return to intro screen when any key is pressed
         """
-        intro_view = IntroView()
-        self.window.show_view(intro_view)
+        self.GameStart()
+
+    def on_click_retry(self, event):
+        """
+        Start the game when start button is clicked
+        """
+        self.GameStart()
 
 
 def main():
